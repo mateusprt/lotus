@@ -80,4 +80,6 @@
 | `print` | Imprime valores no console. | `print("hello world")` |
 
 # Comentários
+| Construto | Descrição | Exemplo |
+|---|---|---|
 | `//` | Comentários. | `// Isso é um comentário` |
