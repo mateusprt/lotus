@@ -5,6 +5,7 @@ type TokenType string
 type Token struct {
 	Type    TokenType
 	Literal string
+	Line    int
 }
 
 const (
@@ -19,33 +20,33 @@ const (
 	BOOLEAN = "BOOLEAN"
 
 	// Operators
-	ASSIGN    = "="
-	EQ        = "=="
-	NOT_EQ    = "!="
-	PLUS      = "+"
-	INCREMENT = "++"
-	MINUS     = "-"
-	DECREMENT = "--"
-	DIVIDE    = "/"
-	MULTIPLY  = "*"
-	BANG      = "!"
-	LT        = "<"
-	GT        = ">"
-	LE        = "<="
-	GE        = ">="
+	ASSIGN    = "ASSIGN"
+	PLUS      = "PLUS"
+	MINUS     = "MINUS"
+	MULTIPLY  = "MULTIPLY"
+	DIVIDE    = "DIVIDE"
+	BANG      = "BANG"
+	LT        = "LT"
+	GT        = "GT"
+	EQ        = "EQ"
+	NOT_EQ    = "NOT_EQ"
+	INCREMENT = "INCREMENT"
+	DECREMENT = "DECREMENT"
+	LE        = "LE"
+	GE        = "GE"
 
 	// Delimiters
-	COMMA     = ","
-	SEMICOLON = ";"
-	COLON     = ":"
-	DOT       = "."
+	COMMA     = "COMMA"
+	SEMICOLON = "SEMICOLON"
+	COLON     = "COLON"
+	DOT       = "DOT"
 
-	LPAREN   = "("
-	RPAREN   = ")"
-	LBRACE   = "{"
-	RBRACE   = "}"
-	LBRACKET = "["
-	RBRACKET = "]"
+	LPAREN   = "LPAREN"
+	RPAREN   = "RPAREN"
+	LBRACE   = "LBRACE"
+	RBRACE   = "RBRACE"
+	LBRACKET = "LBRACKET"
+	RBRACKET = "RBRACKET"
 
 	// Keywords
 	VAR      = "VAR"

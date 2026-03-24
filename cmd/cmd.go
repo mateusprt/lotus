@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io"
 	"os"
+
+	"github.com/mateusprt/lotus/scanner"
 )
 
 func RunPrompt() {
@@ -36,5 +38,7 @@ func RunFile(path string) {
 }
 
 func run(byteSequence []byte) {
-	fmt.Printf("Running code:\n%s\n", string(byteSequence))
+	sc := scanner.New(byteSequence)
+	tokens := scanner.ScanTokens(sc)
+	fmt.Printf("Tokens: %v\n", tokens)
 }
