@@ -78,3 +78,6 @@
 | `last` | Retorna o último elemento de um array. | `last([1,2,3])` |
 | `push` | Adiciona um elemento ao final de um array. | `push([1,2], 3)` |
 | `print` | Imprime valores no console. | `print("hello world")` |
+
+# Comentários
+| `//` | Comentários. | `// Isso é um comentário` |
