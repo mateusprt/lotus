@@ -110,9 +110,27 @@ func scanToken(s *Scanner) {
 	case "\t":
 	case "\n":
 		s.line++
+	case "\"":
+		getString(s)
 	default:
 		Error(s.line, fmt.Sprintf("SyntaxError: Invalid or unexpected symbol: %s", charScanned))
 	}
+}
+
+func getString(s *Scanner) {
+	for peek(s) != "\"" && !isEOF(s) {
+		if peek(s) == "\n" {
+			s.line++
+		}
+		s.current++
+	}
+	if isEOF(s) {
+		Error(s.line, "Unterminated string.")
+		return
+	}
+	s.current++
+	literal := s.Source[s.start+1 : s.current-1]
+	addToken(s, token.STRING, literal)
 }
 
 func peek(s *Scanner) string {
