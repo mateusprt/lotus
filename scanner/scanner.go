@@ -28,6 +28,10 @@ func ScanTokens(s *Scanner) []token.Token {
 		s.start = s.current
 		scanToken(s)
 	}
+	s.Tokens = append(s.Tokens, token.Token{
+		Type: token.EOF,
+		Line: s.line,
+	})
 	return s.Tokens
 }
 
@@ -101,9 +105,32 @@ func scanToken(s *Scanner) {
 		} else {
 			addToken(s, token.GT)
 		}
+	case " ":
+	case "\r":
+	case "\t":
+	case "\n":
+		s.line++
+	case "\"":
+		getString(s)
 	default:
 		Error(s.line, fmt.Sprintf("SyntaxError: Invalid or unexpected symbol: %s", charScanned))
 	}
+}
+
+func getString(s *Scanner) {
+	for peek(s) != "\"" && !isEOF(s) {
+		if peek(s) == "\n" {
+			s.line++
+		}
+		s.current++
+	}
+	if isEOF(s) {
+		Error(s.line, "Unterminated string.")
+		return
+	}
+	s.current++
+	literal := s.Source[s.start+1 : s.current-1]
+	addToken(s, token.STRING, literal)
 }
 
 func peek(s *Scanner) string {
@@ -119,11 +146,18 @@ func getNextChar(s *Scanner) string {
 	return string(ch)
 }
 
-func addToken(s *Scanner, tokenType token.TokenType) {
+func addToken(s *Scanner, tokenType token.TokenType, literal ...interface{}) {
 	text := s.Source[s.start:s.current]
+	var lit interface{}
+	if len(literal) > 0 {
+		lit = literal[0]
+	} else {
+		lit = nil
+	}
 	s.Tokens = append(s.Tokens, token.Token{
 		Type:    tokenType,
-		Literal: text,
+		Lexeme:  text,
+		Literal: lit,
 		Line:    s.line,
 	})
 }
