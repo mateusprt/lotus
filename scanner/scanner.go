@@ -28,6 +28,10 @@ func ScanTokens(s *Scanner) []token.Token {
 		s.start = s.current
 		scanToken(s)
 	}
+	s.Tokens = append(s.Tokens, token.Token{
+		Type: token.EOF,
+		Line: s.line,
+	})
 	return s.Tokens
 }
 
@@ -124,11 +128,18 @@ func getNextChar(s *Scanner) string {
 	return string(ch)
 }
 
-func addToken(s *Scanner, tokenType token.TokenType) {
+func addToken(s *Scanner, tokenType token.TokenType, literal ...interface{}) {
 	text := s.Source[s.start:s.current]
+	var lit interface{}
+	if len(literal) > 0 {
+		lit = literal[0]
+	} else {
+		lit = nil
+	}
 	s.Tokens = append(s.Tokens, token.Token{
 		Type:    tokenType,
-		Literal: text,
+		Lexeme:  text,
+		Literal: lit,
 		Line:    s.line,
 	})
 }
