@@ -113,8 +113,38 @@ func scanToken(s *Scanner) {
 	case "\"":
 		getString(s)
 	default:
+		if isDigit(charScanned) {
+			getNumber(s)
+			return
+		}
 		Error(s.line, fmt.Sprintf("SyntaxError: Invalid or unexpected symbol: %s", charScanned))
 	}
+}
+
+func getNumber(s *Scanner) {
+	for isDigit(peek(s)) {
+		s.current++
+	}
+	if peek(s) == "." && isDigit(peekNext(s)) {
+		s.current++
+		for isDigit(peek(s)) {
+			s.current++
+		}
+		addToken(s, token.FLOAT, s.Source[s.start:s.current])
+	} else {
+		addToken(s, token.INTEGER, s.Source[s.start:s.current])
+	}
+}
+
+func peekNext(s *Scanner) string {
+	if s.current+1 >= len(s.Source) {
+		return ""
+	}
+	return string(s.Source[s.current+1])
+}
+
+func isDigit(ch string) bool {
+	return ch >= "0" && ch <= "9"
 }
 
 func getString(s *Scanner) {
