@@ -101,6 +101,11 @@ func scanToken(s *Scanner) {
 		} else {
 			addToken(s, token.GT)
 		}
+	case " ":
+	case "\r":
+	case "\t":
+	case "\n":
+		s.line++
 	default:
 		Error(s.line, fmt.Sprintf("SyntaxError: Invalid or unexpected symbol: %s", charScanned))
 	}
