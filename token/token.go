@@ -10,13 +10,10 @@ type Token struct {
 }
 
 const (
-	ILLEGAL = "ILLEGAL"
-	EOF     = "EOF"
-
 	// Identifiers
-	IDENT   = "IDENT"
+	EOF     = "EOF"
 	INTEGER = "INTEGER"
-	DOUBLE  = "DOUBLE"
+	FLOAT   = "FLOAT"
 	STRING  = "STRING"
 	BOOLEAN = "BOOLEAN"
 
@@ -67,4 +64,5 @@ const (
 	PUSH     = "PUSH"
 	TRUE     = "TRUE"
 	FALSE    = "FALSE"
+	NULL     = "NULL"
 )
