@@ -14,6 +14,27 @@ type Scanner struct {
 	line    int
 }
 
+var keywords = map[string]token.TokenType{
+	"var":      token.VAR,
+	"const":    token.CONST,
+	"if":       token.IF,
+	"else":     token.ELSE,
+	"for":      token.FOR,
+	"break":    token.BREAK,
+	"continue": token.CONTINUE,
+	"print":    token.PRINT,
+	"function": token.FUNCTION,
+	"return":   token.RETURN,
+	"struct":   token.STRUCT,
+	"len":      token.LEN,
+	"first":    token.FIRST,
+	"last":     token.LAST,
+	"push":     token.PUSH,
+	"true":     token.TRUE,
+	"false":    token.FALSE,
+	"null":     token.NULL,
+}
+
 func New(source []byte) *Scanner {
 	return &Scanner{
 		Source:  string(source),
@@ -117,8 +138,32 @@ func scanToken(s *Scanner) {
 			getNumber(s)
 			return
 		}
+		if isAlpha(charScanned) {
+			getIdentifier(s)
+			return
+		}
 		Error(s.line, fmt.Sprintf("SyntaxError: Invalid or unexpected symbol: %s", charScanned))
 	}
+}
+
+func getIdentifier(s *Scanner) {
+	for isAlphaNumeric(peek(s)) {
+		s.current++
+	}
+	text := s.Source[s.start:s.current]
+	tokenType := keywords[text]
+	if tokenType == "" {
+		tokenType = token.IDENTIFIER
+	}
+	addToken(s, tokenType)
+}
+
+func isAlpha(ch string) bool {
+	return (ch >= "a" && ch <= "z") || (ch >= "A" && ch <= "Z") || ch == "_"
+}
+
+func isAlphaNumeric(ch string) bool {
+	return isAlpha(ch) || isDigit(ch)
 }
 
 func getNumber(s *Scanner) {

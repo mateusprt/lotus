@@ -11,11 +11,12 @@ type Token struct {
 
 const (
 	// Identifiers
-	EOF     = "EOF"
-	INTEGER = "INTEGER"
-	FLOAT   = "FLOAT"
-	STRING  = "STRING"
-	BOOLEAN = "BOOLEAN"
+	EOF        = "EOF"
+	IDENTIFIER = "IDENTIFIER"
+	INTEGER    = "INTEGER"
+	FLOAT      = "FLOAT"
+	STRING     = "STRING"
+	BOOLEAN    = "BOOLEAN"
 
 	// Operators
 	ASSIGN    = "ASSIGN"
