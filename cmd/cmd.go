@@ -6,6 +6,8 @@ import (
 	"io"
 	"os"
 
+	"github.com/mateusprt/lotus/ast/debug"
+	"github.com/mateusprt/lotus/parser"
 	"github.com/mateusprt/lotus/scanner"
 )
 
@@ -40,5 +42,15 @@ func RunFile(path string) {
 func run(byteSequence []byte) {
 	sc := scanner.New(byteSequence)
 	tokens := scanner.ScanTokens(sc)
+
+	p := parser.New(tokens)
+	ast := parser.Parse(p)
+	if ast == nil {
+		fmt.Println("Parsing failed due to syntax errors.")
+		return
+	}
+
+	print := &debug.AstPrinter{}
+	print.Print(ast)
 	fmt.Printf("Tokens: %v\n", tokens)
 }
