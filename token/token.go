@@ -13,8 +13,7 @@ const (
 	// Identifiers
 	EOF        = "EOF"
 	IDENTIFIER = "IDENTIFIER"
-	INTEGER    = "INTEGER"
-	FLOAT      = "FLOAT"
+	NUMBER     = "NUMBER"
 	STRING     = "STRING"
 	BOOLEAN    = "BOOLEAN"
 
