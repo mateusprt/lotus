@@ -175,10 +175,8 @@ func getNumber(s *Scanner) {
 		for isDigit(peek(s)) {
 			s.current++
 		}
-		addToken(s, token.FLOAT, s.Source[s.start:s.current])
-	} else {
-		addToken(s, token.INTEGER, s.Source[s.start:s.current])
 	}
+	addToken(s, token.NUMBER, s.Source[s.start:s.current])
 }
 
 func peekNext(s *Scanner) string {
