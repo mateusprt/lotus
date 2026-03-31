@@ -8,6 +8,10 @@ import (
 
 type AstPrinter struct{}
 
+func NewAstPrinter() *AstPrinter {
+	return &AstPrinter{}
+}
+
 func (a *AstPrinter) VisitBinary(expr *ast.Binary) interface{} {
 	return a.parenthesize(expr.Operator.Lexeme, expr.Left, expr.Right)
 }

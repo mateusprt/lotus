@@ -50,7 +50,7 @@ func run(byteSequence []byte) {
 		return
 	}
 
-	print := &debug.AstPrinter{}
+	print := debug.NewAstPrinter()
 	print.Print(ast)
 	fmt.Printf("Tokens: %v\n", tokens)
 }
