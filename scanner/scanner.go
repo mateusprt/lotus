@@ -33,6 +33,8 @@ var keywords = map[string]token.TokenType{
 	"true":     token.TRUE,
 	"false":    token.FALSE,
 	"null":     token.NULL,
+	"and":      token.AND,
+	"or":       token.OR,
 }
 
 func New(source []byte) *Scanner {
