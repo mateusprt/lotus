@@ -60,7 +60,6 @@ func ScanTokens(s *Scanner) []token.Token {
 
 func scanToken(s *Scanner) {
 	charScanned := getNextChar(s)
-	fmt.Printf("char escaneado: %s\n", charScanned)
 	switch charScanned {
 	case "(":
 		addToken(s, token.LPAREN)
