@@ -65,4 +65,6 @@ const (
 	TRUE     = "TRUE"
 	FALSE    = "FALSE"
 	NULL     = "NULL"
+	AND      = "AND"
+	OR       = "OR"
 )
