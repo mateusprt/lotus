@@ -2,6 +2,7 @@ package parser
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/mateusprt/lotus/ast"
 	"github.com/mateusprt/lotus/token"
@@ -155,6 +156,14 @@ func primary(p *Parser) (ast.Expression, error) {
 		return &ast.Literal{Value: nil}, nil
 	}
 	if match(p, token.NUMBER, token.STRING) {
+		if previous(p).Type == token.NUMBER {
+			lexem := previous(p).Literal.(string)
+			value, err := strconv.ParseFloat(lexem, 64)
+			if err != nil {
+				return nil, NewParseError(previous(p), "Invalid number format.")
+			}
+			return &ast.Literal{Value: value}, nil
+		}
 		return &ast.Literal{Value: previous(p).Literal}, nil
 	}
 	if match(p, token.LPAREN) {
