@@ -20,8 +20,6 @@ var keywords = map[string]token.TokenType{
 	"if":       token.IF,
 	"else":     token.ELSE,
 	"for":      token.FOR,
-	"break":    token.BREAK,
-	"continue": token.CONTINUE,
 	"print":    token.PRINT,
 	"function": token.FUNCTION,
 	"return":   token.RETURN,
@@ -100,14 +98,14 @@ func scanToken(s *Scanner) {
 			addToken(s, token.MINUS)
 		}
 	case "*":
-		addToken(s, token.MULTIPLY)
+		addToken(s, token.STAR)
 	case "/":
 		if advanceIfMatch(s, "/") {
 			for peek(s) != "\n" && !isEOF(s) {
 				s.current++
 			}
 		} else {
-			addToken(s, token.DIVIDE)
+			addToken(s, token.SLASH)
 		}
 	case "!":
 		if advanceIfMatch(s, "=") {

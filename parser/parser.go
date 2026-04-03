@@ -104,7 +104,7 @@ func factor(p *Parser) (ast.Expression, error) {
 		return nil, err
 	}
 
-	for match(p, token.DIVIDE, token.MULTIPLY) {
+	for match(p, token.SLASH, token.STAR) {
 		operator := previous(p)
 		right, err := unary(p)
 		if err != nil {
@@ -218,9 +218,7 @@ func synchronize(p *Parser) {
 			token.IF,
 			token.ELSE,
 			token.PRINT,
-			token.RETURN,
-			token.BREAK,
-			token.CONTINUE:
+			token.RETURN:
 			return
 		}
 
