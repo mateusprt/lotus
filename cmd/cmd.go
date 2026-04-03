@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/mateusprt/lotus/ast/debug"
+	"github.com/mateusprt/lotus/interpreter"
 	"github.com/mateusprt/lotus/parser"
 	"github.com/mateusprt/lotus/scanner"
 )
@@ -23,8 +24,7 @@ func RunPrompt() {
 				fmt.Println("\nGoodbye!")
 				break
 			}
-			fmt.Printf("Error reading input: %s\n", err)
-			break
+			os.Exit(65)
 		}
 		run(line)
 	}
@@ -34,21 +34,23 @@ func RunFile(path string) {
 	byteSequence, err := os.ReadFile(path)
 	if err != nil {
 		fmt.Printf("Error reading file: %s\n", err)
-		os.Exit(1)
+		os.Exit(65)
 	}
 	run(byteSequence)
 }
 
 func run(byteSequence []byte) {
 	sc := scanner.New(byteSequence)
+	interp := interpreter.New()
 	tokens := scanner.ScanTokens(sc)
 
 	p := parser.New(tokens)
 	ast := parser.Parse(p)
 	if ast == nil {
-		fmt.Println("Parsing failed due to syntax errors.")
-		return
+		os.Exit(65)
 	}
+
+	interp.Interpret(ast)
 
 	print := debug.NewAstPrinter()
 	print.Print(ast)
