@@ -54,7 +54,7 @@
 
 | Construto | Descrição | Exemplo |
 |---|---|---|
-| `if expression` | Estrutura condicional que executa um bloco se a condição for verdadeira. | `if (x < y) { x } else { y }` |
+| `if expression` | Estrutura condicional que executa um bloco se a condição for verdadeira. | `if (x < y) { x; } else { y; }` |
 | `for loop` | Estrutura de repetição com inicialização, condição e incremento. | `for (var i = 0; i < 10; i = i + 1) { print(i); }` |
 
 ---
@@ -63,9 +63,9 @@
 
 | Construto | Descrição | Exemplo |
 |---|---|---|
-| `function literal` | Define uma função anônima utilizando a palavra-chave `function`. | `function(x, y) { x + y }` |
+| `function literal` | Define uma função anônima utilizando a palavra-chave `function`. | `function(x, y) { x + y; }` |
 | `call expression` | Executa uma função passando argumentos. | `add(2, 3)` |
-| `struct mutation via function` | Funções podem modificar campos de structs recebidas como argumento através de atribuição de campo. | `function(u) { u.age = u.age + 1 }` |
+| `struct mutation via function` | Funções podem modificar campos de structs recebidas como argumento através de atribuição de campo. | `function(u) { u.age = u.age + 1; }` |
 
 ---
 
@@ -73,11 +73,11 @@
 
 | Construto | Descrição | Exemplo |
 |---|---|---|
-| `len` | Retorna o tamanho de uma string ou array. | `len("hello")` |
-| `first` | Retorna o primeiro elemento de um array. | `first([1,2,3])` |
-| `last` | Retorna o último elemento de um array. | `last([1,2,3])` |
-| `push` | Adiciona um elemento ao final de um array. | `push([1,2], 3)` |
-| `print` | Imprime valores no console. | `print("hello world")` |
+| `len` | Retorna o tamanho de uma string ou array. | `len("hello");` |
+| `first` | Retorna o primeiro elemento de um array. | `first([1,2,3]);` |
+| `last` | Retorna o último elemento de um array. | `last([1,2,3]);` |
+| `push` | Adiciona um elemento ao final de um array. | `push([1,2], 3);` |
+| `print` | Imprime valores no console. | `print "hello world"; ` |
 
 # Comentários
 | Construto | Descrição | Exemplo |

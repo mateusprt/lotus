@@ -14,7 +14,7 @@ func New() *Interpreter {
 	return &Interpreter{}
 }
 
-func (i *Interpreter) Interpret(expr ast.Expression) {
+func (i *Interpreter) Interpret(statements []ast.Stmt) {
 	defer func() {
 		if r := recover(); r != nil {
 			if runtimeErr, ok := r.(*RuntimeError); ok {
@@ -25,10 +25,13 @@ func (i *Interpreter) Interpret(expr ast.Expression) {
 			}
 		}
 	}()
-	result := evaluate(expr, i)
-	if result != nil {
-		println(stringify(result))
+	for _, statement := range statements {
+		execute(statement, i)
 	}
+}
+
+func execute(stmt ast.Stmt, interpreter *Interpreter) {
+	stmt.Accept(interpreter)
 }
 
 func (i *Interpreter) VisitBinary(expr *ast.Binary) interface{} {
@@ -92,6 +95,15 @@ func (i *Interpreter) VisitUnary(expr *ast.Unary) interface{} {
 		return !isTruthy(right)
 	}
 	return nil
+}
+
+func (i *Interpreter) VisitExpressionStmt(stmt *ast.ExpressionStmt) {
+	evaluate(stmt.Expression, i)
+}
+
+func (i *Interpreter) VisitPrintStmt(stmt *ast.PrintStmt) {
+	value := evaluate(stmt.Expression, i)
+	fmt.Println(stringify(value))
 }
 
 func evaluate(expr ast.Expression, interpreter *Interpreter) interface{} {
