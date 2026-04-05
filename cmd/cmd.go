@@ -6,7 +6,6 @@ import (
 	"io"
 	"os"
 
-	"github.com/mateusprt/lotus/ast/debug"
 	"github.com/mateusprt/lotus/interpreter"
 	"github.com/mateusprt/lotus/parser"
 	"github.com/mateusprt/lotus/scanner"
@@ -45,14 +44,6 @@ func run(byteSequence []byte) {
 	tokens := scanner.ScanTokens(sc)
 
 	p := parser.New(tokens)
-	ast := parser.Parse(p)
-	if ast == nil {
-		os.Exit(65)
-	}
-
-	interp.Interpret(ast)
-
-	print := debug.NewAstPrinter()
-	print.Print(ast)
-	fmt.Printf("Tokens: %v\n", tokens)
+	statements := parser.Parse(p)
+	interp.Interpret(statements)
 }

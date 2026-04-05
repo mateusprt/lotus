@@ -1,7 +1,6 @@
 package parser
 
 import (
-	"fmt"
 	"strconv"
 
 	"github.com/mateusprt/lotus/ast"
@@ -20,16 +19,37 @@ func New(tokens []token.Token) *Parser {
 	}
 }
 
-func Parse(p *Parser) ast.Expression {
+func Parse(p *Parser) []ast.Stmt {
+	statements := make([]ast.Stmt, 0)
+	for !isAtEnd(p) {
+		statements = append(statements, statement(p))
+	}
+	return statements
+}
+
+func statement(p *Parser) ast.Stmt {
+	if match(p, token.PRINT) {
+		return printStatement(p)
+	}
+	return expressionStatement(p)
+}
+
+func printStatement(p *Parser) *ast.PrintStmt {
 	expr, err := expression(p)
 	if err != nil {
-		if parseErr, ok := err.(*ParseError); ok {
-			fmt.Println("ParseError:", parseErr.Message)
-			return nil
-		}
-		return nil
+		panic(err)
 	}
-	return expr
+	consume(p, token.SEMICOLON, "Expect ';' after value.")
+	return &ast.PrintStmt{Expression: expr}
+}
+
+func expressionStatement(p *Parser) *ast.ExpressionStmt {
+	expr, err := expression(p)
+	if err != nil {
+		panic(err)
+	}
+	consume(p, token.SEMICOLON, "Expect ';' after expression.")
+	return &ast.ExpressionStmt{Expression: expr}
 }
 
 func expression(p *Parser) (ast.Expression, error) {
