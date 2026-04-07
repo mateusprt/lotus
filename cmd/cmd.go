@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 
+	"github.com/mateusprt/lotus/environment"
 	"github.com/mateusprt/lotus/interpreter"
 	"github.com/mateusprt/lotus/parser"
 	"github.com/mateusprt/lotus/scanner"
@@ -40,7 +41,7 @@ func RunFile(path string) {
 
 func run(byteSequence []byte) {
 	sc := scanner.New(byteSequence)
-	interp := interpreter.New()
+	interp := interpreter.New(environment.New())
 	tokens := scanner.ScanTokens(sc)
 
 	p := parser.New(tokens)

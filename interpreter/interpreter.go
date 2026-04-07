@@ -5,20 +5,24 @@ import (
 	"os"
 
 	"github.com/mateusprt/lotus/ast"
+	"github.com/mateusprt/lotus/environment"
+	"github.com/mateusprt/lotus/errors"
 	"github.com/mateusprt/lotus/token"
 )
 
-type Interpreter struct{}
+type Interpreter struct {
+	environment *environment.Environment
+}
 
-func New() *Interpreter {
-	return &Interpreter{}
+func New(e *environment.Environment) *Interpreter {
+	return &Interpreter{environment: e}
 }
 
 func (i *Interpreter) Interpret(statements []ast.Stmt) {
 	defer func() {
 		if r := recover(); r != nil {
-			if runtimeErr, ok := r.(*RuntimeError); ok {
-				PrintRuntimeError(runtimeErr)
+			if runtimeErr, ok := r.(*errors.RuntimeError); ok {
+				errors.PrintRuntimeError(runtimeErr)
 				os.Exit(65)
 			} else {
 				panic(r)
@@ -65,7 +69,7 @@ func (i *Interpreter) VisitBinary(expr *ast.Binary) interface{} {
 		if isString(left) && isString(right) {
 			return toString(left) + toString(right)
 		}
-		ThrowRuntimeError(expr.Operator, "Operands must be two numbers or two strings.")
+		errors.ThrowRuntimeError(expr.Operator, "Operands must be two numbers or two strings.")
 	case token.SLASH:
 		checkNumberOperands(expr.Operator, left, right)
 		return toFloat(left) / toFloat(right)
@@ -97,6 +101,10 @@ func (i *Interpreter) VisitUnary(expr *ast.Unary) interface{} {
 	return nil
 }
 
+func (i *Interpreter) VisitVariable(expr *ast.Variable) interface{} {
+	return environment.Get(i.environment, expr.Name)
+}
+
 func (i *Interpreter) VisitExpressionStmt(stmt *ast.ExpressionStmt) {
 	evaluate(stmt.Expression, i)
 }
@@ -104,6 +112,14 @@ func (i *Interpreter) VisitExpressionStmt(stmt *ast.ExpressionStmt) {
 func (i *Interpreter) VisitPrintStmt(stmt *ast.PrintStmt) {
 	value := evaluate(stmt.Expression, i)
 	fmt.Println(stringify(value))
+}
+
+func (i *Interpreter) VisitVarStmt(stmt *ast.VarStmt) {
+	var value interface{} = nil
+	if stmt.Initializer != nil {
+		value = evaluate(stmt.Initializer, i)
+	}
+	environment.Define(i.environment, stmt.Name.Lexeme, value)
 }
 
 func evaluate(expr ast.Expression, interpreter *Interpreter) interface{} {
@@ -167,14 +183,14 @@ func checkNumberOperand(operator token.Token, operand interface{}) {
 	if isNumber(operand) {
 		return
 	}
-	ThrowRuntimeError(operator, "Operand must be a number.")
+	errors.ThrowRuntimeError(operator, "Operand must be a number.")
 }
 
 func checkNumberOperands(operator token.Token, left, right interface{}) {
 	if isNumber(left) && isNumber(right) {
 		return
 	}
-	ThrowRuntimeError(operator, "Operands must be numbers.")
+	errors.ThrowRuntimeError(operator, "Operands must be numbers.")
 }
 
 func stringify(value interface{}) string {
