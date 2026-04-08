@@ -1,6 +1,6 @@
 # Lotus programming language
 
-Lotus is a simple and intuitive programming language that makes it easy to build solutions.
+A simple and intuitive programming language.
 
 ## 🚧 Work in progress
 
