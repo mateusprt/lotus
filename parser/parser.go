@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"github.com/mateusprt/lotus/ast"
+	"github.com/mateusprt/lotus/errors"
 	"github.com/mateusprt/lotus/token"
 )
 
@@ -22,9 +23,44 @@ func New(tokens []token.Token) *Parser {
 func Parse(p *Parser) []ast.Stmt {
 	statements := make([]ast.Stmt, 0)
 	for !isAtEnd(p) {
-		statements = append(statements, statement(p))
+		statements = append(statements, declaration(p))
 	}
 	return statements
+}
+
+func declaration(p *Parser) ast.Stmt {
+	defer func() {
+		if r := recover(); r != nil {
+			if _, ok := r.(*errors.ParseError); ok {
+				synchronize(p)
+			} else {
+				panic(r)
+			}
+		}
+	}()
+	if match(p, token.VAR) {
+		return varDeclaration(p)
+	}
+	return statement(p)
+}
+
+func varDeclaration(p *Parser) *ast.VarStmt {
+	name, err := consume(p, token.IDENTIFIER, "Expect variable name.")
+	if err != nil {
+		panic(err)
+	}
+
+	var initializer ast.Expression
+	if match(p, token.ASSIGN) {
+		expr, err := expression(p)
+		if err != nil {
+			panic(err)
+		}
+		initializer = expr
+	}
+
+	consume(p, token.SEMICOLON, "Expect ';' after variable declaration.")
+	return &ast.VarStmt{Name: name, Initializer: initializer}
 }
 
 func statement(p *Parser) ast.Stmt {
@@ -53,7 +89,29 @@ func expressionStatement(p *Parser) *ast.ExpressionStmt {
 }
 
 func expression(p *Parser) (ast.Expression, error) {
-	return equality(p)
+	return assignment(p)
+}
+
+func assignment(p *Parser) (ast.Expression, error) {
+	expr, err := equality(p)
+	if err != nil {
+		return nil, err
+	}
+
+	if match(p, token.ASSIGN) {
+		equals := previous(p)
+		value, err := assignment(p)
+		if err != nil {
+			return nil, err
+		}
+
+		if variable, ok := expr.(*ast.Variable); ok {
+			token := variable.Name
+			return &ast.Assign{Name: token, Value: value}, nil
+		}
+		return nil, errors.NewParseError(equals, "Invalid assignment target.")
+	}
+	return expr, nil
 }
 
 func equality(p *Parser) (ast.Expression, error) {
@@ -180,11 +238,14 @@ func primary(p *Parser) (ast.Expression, error) {
 			lexem := previous(p).Literal.(string)
 			value, err := strconv.ParseFloat(lexem, 64)
 			if err != nil {
-				return nil, NewParseError(previous(p), "Invalid number format.")
+				return nil, errors.NewParseError(previous(p), "Invalid number format.")
 			}
 			return &ast.Literal{Value: value}, nil
 		}
 		return &ast.Literal{Value: previous(p).Literal}, nil
+	}
+	if match(p, token.IDENTIFIER) {
+		return &ast.Variable{Name: previous(p)}, nil
 	}
 	if match(p, token.LPAREN) {
 		expr, err := expression(p)
@@ -194,14 +255,14 @@ func primary(p *Parser) (ast.Expression, error) {
 		consume(p, token.RPAREN, "Expect ')' after expression.")
 		return &ast.Grouping{Expression: expr}, nil
 	}
-	return nil, NewParseError(peek(p), "Expect expression.")
+	return nil, errors.NewParseError(peek(p), "Expect expression.")
 }
 
 func consume(p *Parser, t token.TokenType, message string) (token.Token, error) {
 	if check(p, t) {
 		return advance(p), nil
 	}
-	return token.Token{}, NewParseError(peek(p), message)
+	return token.Token{}, errors.NewParseError(peek(p), message)
 }
 
 func check(p *Parser, t token.TokenType) bool {

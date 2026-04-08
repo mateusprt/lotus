@@ -1,10 +1,15 @@
-package parser
+package errors
 
 import (
 	"fmt"
 
 	"github.com/mateusprt/lotus/token"
 )
+
+type RuntimeError struct {
+	Token   token.Token
+	Message string
+}
 
 type ParseError struct {
 	Type    string
@@ -28,4 +33,12 @@ func NewParseError(currentToken token.Token, message string) *ParseError {
 
 func report(message string) {
 	fmt.Println(message)
+}
+
+func ThrowRuntimeError(tok token.Token, message string) {
+	panic(&RuntimeError{Token: tok, Message: message})
+}
+
+func PrintRuntimeError(err *RuntimeError) {
+	fmt.Printf("[line %d] RuntimeError: %s\n", err.Token.Line, err.Message)
 }
