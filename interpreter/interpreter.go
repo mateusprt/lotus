@@ -128,6 +128,22 @@ func (i *Interpreter) VisitAssign(expr *ast.Assign) interface{} {
 	return value
 }
 
+func (i *Interpreter) VisitBlockStmt(stmt *ast.BlockStmt) {
+	executeBlock(i, stmt.Statements, environment.New())
+}
+
+func executeBlock(interpreter *Interpreter, statements []ast.Stmt, env *environment.Environment) {
+	previous := interpreter.environment
+	interpreter.environment = env
+	defer func() {
+		interpreter.environment = previous
+	}()
+
+	for _, statement := range statements {
+		execute(statement, interpreter)
+	}
+}
+
 func evaluate(expr ast.Expression, interpreter *Interpreter) interface{} {
 	return expr.Accept(interpreter)
 }

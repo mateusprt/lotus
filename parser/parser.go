@@ -67,7 +67,19 @@ func statement(p *Parser) ast.Stmt {
 	if match(p, token.PRINT) {
 		return printStatement(p)
 	}
+	if match(p, token.LBRACE) {
+		return &ast.BlockStmt{Statements: block(p)}
+	}
 	return expressionStatement(p)
+}
+
+func block(p *Parser) []ast.Stmt {
+	var statements []ast.Stmt
+	for !check(p, token.RBRACE) && !isAtEnd(p) {
+		statements = append(statements, declaration(p))
+	}
+	consume(p, token.RBRACE, "Expect '}' after block.")
+	return statements
 }
 
 func printStatement(p *Parser) *ast.PrintStmt {
