@@ -6,7 +6,8 @@ import (
 )
 
 type Environment struct {
-	values map[string]interface{}
+	values    map[string]interface{}
+	enclosing *Environment
 }
 
 func New() *Environment {
@@ -22,6 +23,10 @@ func Get(e *Environment, name token.Token) interface{} {
 		return e.values[name.Lexeme]
 	}
 
+	if e.enclosing != nil {
+		return Get(e.enclosing, name)
+	}
+
 	errors.ThrowRuntimeError(name, "Undefined variable '"+name.Lexeme+"'.")
 	return nil
 }
@@ -29,6 +34,11 @@ func Get(e *Environment, name token.Token) interface{} {
 func Assign(e *Environment, name token.Token, value interface{}) {
 	if _, ok := e.values[name.Lexeme]; ok {
 		e.values[name.Lexeme] = value
+		return
+	}
+
+	if e.enclosing != nil {
+		Assign(e.enclosing, name, value)
 		return
 	}
 
