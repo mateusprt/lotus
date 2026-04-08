@@ -50,3 +50,7 @@ func (a *AstPrinter) parenthesize(name string, exprs ...ast.Expression) string {
 func (a *AstPrinter) Print(expr ast.Expression) string {
 	return expr.Accept(a).(string)
 }
+
+func (a *AstPrinter) VisitAssign(expr *ast.Assign) interface{} {
+	return a.parenthesize("assign "+expr.Name.Lexeme, expr.Value)
+}

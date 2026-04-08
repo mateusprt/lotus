@@ -122,6 +122,12 @@ func (i *Interpreter) VisitVarStmt(stmt *ast.VarStmt) {
 	environment.Define(i.environment, stmt.Name.Lexeme, value)
 }
 
+func (i *Interpreter) VisitAssign(expr *ast.Assign) interface{} {
+	value := evaluate(expr.Value, i)
+	environment.Assign(i.environment, expr.Name, value)
+	return value
+}
+
 func evaluate(expr ast.Expression, interpreter *Interpreter) interface{} {
 	return expr.Accept(interpreter)
 }

@@ -25,3 +25,12 @@ func Get(e *Environment, name token.Token) interface{} {
 	errors.ThrowRuntimeError(name, "Undefined variable '"+name.Lexeme+"'.")
 	return nil
 }
+
+func Assign(e *Environment, name token.Token, value interface{}) {
+	if _, ok := e.values[name.Lexeme]; ok {
+		e.values[name.Lexeme] = value
+		return
+	}
+
+	errors.ThrowRuntimeError(name, "Undefined variable '"+name.Lexeme+"'.")
+}

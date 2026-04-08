@@ -48,3 +48,12 @@ type Variable struct {
 func (v *Variable) Accept(visitor Visitor) interface{} {
 	return visitor.VisitVariable(v)
 }
+
+type Assign struct {
+	Name  token.Token
+	Value Expression
+}
+
+func (a *Assign) Accept(visitor Visitor) interface{} {
+	return visitor.VisitAssign(a)
+}

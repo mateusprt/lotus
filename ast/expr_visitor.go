@@ -6,4 +6,5 @@ type Visitor interface {
 	VisitLiteral(expr *Literal) interface{}
 	VisitUnary(expr *Unary) interface{}
 	VisitVariable(expr *Variable) interface{}
+	VisitAssign(expr *Assign) interface{}
 }
