@@ -54,3 +54,7 @@ func (a *AstPrinter) Print(expr ast.Expression) string {
 func (a *AstPrinter) VisitAssign(expr *ast.Assign) interface{} {
 	return a.parenthesize("assign "+expr.Name.Lexeme, expr.Value)
 }
+
+func (a *AstPrinter) VisitLogical(expr *ast.Logical) interface{} {
+	return a.parenthesize(expr.Operator.Lexeme, expr.Left, expr.Right)
+}

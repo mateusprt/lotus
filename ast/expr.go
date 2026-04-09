@@ -57,3 +57,13 @@ type Assign struct {
 func (a *Assign) Accept(visitor Visitor) interface{} {
 	return visitor.VisitAssign(a)
 }
+
+type Logical struct {
+	Left     Expression
+	Operator token.Token
+	Right    Expression
+}
+
+func (l *Logical) Accept(visitor Visitor) interface{} {
+	return visitor.VisitLogical(l)
+}

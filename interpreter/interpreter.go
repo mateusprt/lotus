@@ -140,6 +140,22 @@ func (i *Interpreter) VisitIfStmt(stmt *ast.IfStmt) {
 	}
 }
 
+func (i *Interpreter) VisitLogical(expr *ast.Logical) interface{} {
+	left := evaluate(expr.Left, i)
+
+	if expr.Operator.Type == token.OR {
+		if isTruthy(left) {
+			return left
+		}
+	} else {
+		if !isTruthy(left) {
+			return left
+		}
+	}
+
+	return evaluate(expr.Right, i)
+}
+
 func executeBlock(interpreter *Interpreter, statements []ast.Stmt, env *environment.Environment) {
 	previous := interpreter.environment
 	interpreter.environment = env
@@ -162,6 +178,12 @@ func isTruthy(value interface{}) bool {
 	}
 	if b, ok := value.(bool); ok {
 		return b
+	}
+	if n, ok := value.(int); ok {
+		return n != 0
+	}
+	if n, ok := value.(float64); ok {
+		return n != 0
 	}
 	return true
 }
