@@ -64,6 +64,9 @@ func varDeclaration(p *Parser) *ast.VarStmt {
 }
 
 func statement(p *Parser) ast.Stmt {
+	if match(p, token.IF) {
+		return ifStatement(p)
+	}
 	if match(p, token.PRINT) {
 		return printStatement(p)
 	}
@@ -80,6 +83,32 @@ func block(p *Parser) []ast.Stmt {
 	}
 	consume(p, token.RBRACE, "Expect '}' after block.")
 	return statements
+}
+
+func ifStatement(p *Parser) *ast.IfStmt {
+	consume(p, token.LPAREN, "Expect '(' after 'if'.")
+	condition, err := expression(p)
+	if err != nil {
+		panic(err)
+	}
+	consume(p, token.RPAREN, "Expect ')' after if condition.")
+	consume(p, token.LBRACE, "Expect '{' before if body.")
+
+	thenBranch := statement(p)
+
+	consume(p, token.RBRACE, "Expect '}' after if body.")
+	var elseBranch ast.Stmt
+	if match(p, token.ELSE) {
+		consume(p, token.LBRACE, "Expect '{' before if body.")
+		elseBranch = statement(p)
+		consume(p, token.RBRACE, "Expect '}' after if body.")
+	}
+
+	return &ast.IfStmt{
+		Condition: condition,
+		Then:      thenBranch,
+		Else:      elseBranch,
+	}
 }
 
 func printStatement(p *Parser) *ast.PrintStmt {

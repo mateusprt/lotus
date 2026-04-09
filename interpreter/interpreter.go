@@ -132,6 +132,14 @@ func (i *Interpreter) VisitBlockStmt(stmt *ast.BlockStmt) {
 	executeBlock(i, stmt.Statements, environment.New())
 }
 
+func (i *Interpreter) VisitIfStmt(stmt *ast.IfStmt) {
+	if isTruthy(evaluate(stmt.Condition, i)) {
+		execute(stmt.Then, i)
+	} else if stmt.Else != nil {
+		execute(stmt.Else, i)
+	}
+}
+
 func executeBlock(interpreter *Interpreter, statements []ast.Stmt, env *environment.Environment) {
 	previous := interpreter.environment
 	interpreter.environment = env

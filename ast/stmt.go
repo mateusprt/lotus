@@ -38,3 +38,13 @@ type BlockStmt struct {
 func (b *BlockStmt) Accept(visitor StmtVisitor) {
 	visitor.VisitBlockStmt(b)
 }
+
+type IfStmt struct {
+	Condition Expression
+	Then      Stmt
+	Else      Stmt
+}
+
+func (i *IfStmt) Accept(visitor StmtVisitor) {
+	visitor.VisitIfStmt(i)
+}
