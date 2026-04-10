@@ -52,6 +52,7 @@ const (
 	IF       = "IF"
 	ELSE     = "ELSE"
 	FOR      = "FOR"
+	WHILE    = "WHILE"
 	PRINT    = "PRINT"
 	FUNCTION = "FUNCTION"
 	RETURN   = "RETURN"
