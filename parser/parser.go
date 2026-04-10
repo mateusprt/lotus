@@ -70,6 +70,9 @@ func statement(p *Parser) ast.Stmt {
 	if match(p, token.PRINT) {
 		return printStatement(p)
 	}
+	if match(p, token.WHILE) {
+		return whileStatement(p)
+	}
 	if match(p, token.LBRACE) {
 		return &ast.BlockStmt{Statements: block(p)}
 	}
@@ -83,6 +86,20 @@ func block(p *Parser) []ast.Stmt {
 	}
 	consume(p, token.RBRACE, "Expect '}' after block.")
 	return statements
+}
+
+func whileStatement(p *Parser) ast.Stmt {
+	consume(p, token.LPAREN, "Expect '(' after 'while'.")
+	condition, err := expression(p)
+	if err != nil {
+		panic(err)
+	}
+	consume(p, token.RPAREN, "Expect ')' after condition.")
+	body := statement(p)
+	return &ast.WhileStmt{
+		Condition: condition,
+		Body:      body,
+	}
 }
 
 func ifStatement(p *Parser) *ast.IfStmt {

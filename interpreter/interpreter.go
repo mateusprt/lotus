@@ -129,7 +129,8 @@ func (i *Interpreter) VisitAssign(expr *ast.Assign) interface{} {
 }
 
 func (i *Interpreter) VisitBlockStmt(stmt *ast.BlockStmt) {
-	executeBlock(i, stmt.Statements, environment.New())
+	env := environment.NewEnclosed(i.environment)
+	executeBlock(i, stmt.Statements, env)
 }
 
 func (i *Interpreter) VisitIfStmt(stmt *ast.IfStmt) {
@@ -137,6 +138,12 @@ func (i *Interpreter) VisitIfStmt(stmt *ast.IfStmt) {
 		execute(stmt.Then, i)
 	} else if stmt.Else != nil {
 		execute(stmt.Else, i)
+	}
+}
+
+func (i *Interpreter) VisitWhileStmt(stmt *ast.WhileStmt) {
+	for isTruthy(evaluate(stmt.Condition, i)) {
+		execute(stmt.Body, i)
 	}
 }
 
