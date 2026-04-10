@@ -44,3 +44,10 @@ func Assign(e *Environment, name token.Token, value interface{}) {
 
 	errors.ThrowRuntimeError(name, "Undefined variable '"+name.Lexeme+"'.")
 }
+
+func NewEnclosed(enclosing *Environment) *Environment {
+	return &Environment{
+		values:    make(map[string]interface{}),
+		enclosing: enclosing,
+	}
+}

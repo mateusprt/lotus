@@ -16,8 +16,18 @@ func RunPrompt() {
 	fmt.Println("Welcome to the Lotus REPL!")
 	fmt.Println("Press Ctrl+D to exit.")
 	reader := bufio.NewReader(os.Stdin)
+	env := environment.New()
+	interp := interpreter.New(env)
+
+	var buffer []byte
+	openBraces := 0
+
 	for {
-		fmt.Print("> ")
+		if openBraces == 0 {
+			fmt.Print("> ")
+		} else {
+			fmt.Print(". ")
+		}
 		line, err := reader.ReadBytes('\n')
 		if err != nil {
 			if err == io.EOF {
@@ -26,7 +36,24 @@ func RunPrompt() {
 			}
 			os.Exit(65)
 		}
-		run(line)
+		buffer = append(buffer, line...)
+
+		// Conta chaves abertas e fechadas
+		for _, b := range line {
+			if b == '{' {
+				openBraces++
+			}
+			if b == '}' {
+				openBraces--
+			}
+		}
+
+		// Só executa quando todos os blocos estão fechados
+		if openBraces <= 0 && len(buffer) > 0 {
+			run(buffer, interp)
+			buffer = nil
+			openBraces = 0
+		}
 	}
 }
 
@@ -36,14 +63,12 @@ func RunFile(path string) {
 		fmt.Printf("Error reading file: %s\n", err)
 		os.Exit(65)
 	}
-	run(byteSequence)
+	run(byteSequence, interpreter.New(environment.New()))
 }
 
-func run(byteSequence []byte) {
+func run(byteSequence []byte, interp *interpreter.Interpreter) {
 	sc := scanner.New(byteSequence)
-	interp := interpreter.New(environment.New())
 	tokens := scanner.ScanTokens(sc)
-
 	p := parser.New(tokens)
 	statements := parser.Parse(p)
 	interp.Interpret(statements)
