@@ -9,9 +9,7 @@
 | `var statement` | Declaração de variável com atribuição de valor. | `var x = 10;` |
 | `return statement` | Retorna um valor dentro de uma função. | `return x + y;` |
 | `block statement` | Bloco de código executado sequencialmente. | `{ var x = 5; x; }` |
-| `assignment statement` | Permite reatribuir um novo valor a uma variável já declarada. | `x = 20;` |
-| `break statement` | Interrompe imediatamente a execução de um loop. | `break;` |
-| `continue statement` | Interrompe a iteração atual do loop e continua para a próxima. | `continue;` |
+| `assignment statement` | Permite reatribuir um novo valor a uma variável já declarada. | `x = 20;` 
 
 ---
 
@@ -41,7 +39,7 @@
 
 | Construto | Descrição | Exemplo |
 |---|---|---|
-| `integer literal` | Número inteiro literal. | `10` |
+| `number literal` | Número inteiro ou float literal. | `10`, `10.1` |
 | `boolean literal` | Valor booleano literal. | `true`, `false` |
 | `string literal` | Texto literal. | `"hello"` |
 | `prefix expression` | Operador antes do operando. | `!true`, `-5` |
@@ -55,7 +53,8 @@
 | Construto | Descrição | Exemplo |
 |---|---|---|
 | `if expression` | Estrutura condicional que executa um bloco se a condição for verdadeira. | `if (x < y) { x; } else { y; }` |
-| `for loop` | Estrutura de repetição com inicialização, condição e incremento. | `for (var i = 0; i < 10; i = i + 1) { print(i); }` |
+| `for (loop)` | Estrutura de repetição com inicialização, condição e incremento. | `for (var i = 0; i < 10; i = i + 1) { print(i); }` |
+| `while (loop)` | Estrutura de repetição com inicialização, condição e incremento. | `while (i > 1) { print(i); }` |
 
 ---
 
