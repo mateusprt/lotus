@@ -8,6 +8,7 @@ import (
 
 	"github.com/mateusprt/lotus/environment"
 	"github.com/mateusprt/lotus/interpreter"
+	"github.com/mateusprt/lotus/interpreter/functions"
 	"github.com/mateusprt/lotus/parser"
 	"github.com/mateusprt/lotus/scanner"
 )
@@ -18,6 +19,7 @@ func RunPrompt() {
 	reader := bufio.NewReader(os.Stdin)
 	env := environment.New()
 	interp := interpreter.New(env)
+	environment.Define(env, "now", &functions.NowFunction{})
 
 	var buffer []byte
 	openBraces := 0

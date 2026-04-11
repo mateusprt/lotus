@@ -173,7 +173,54 @@ func unary(p *Parser) (ast.Expression, error) {
 			Right:    right,
 		}, nil
 	}
-	return primary(p)
+	return call(p)
+}
+
+func call(p *Parser) (ast.Expression, error) {
+	expr, err := primary(p)
+	if err != nil {
+		return nil, err
+	}
+
+	for {
+		if match(p, token.LPAREN) {
+			expr, err = finishCall(p, expr)
+			if err != nil {
+				return nil, err
+			}
+		} else {
+			break
+		}
+	}
+	return expr, nil
+}
+
+func finishCall(p *Parser, callee ast.Expression) (ast.Expression, error) {
+	args := make([]ast.Expression, 0)
+	if !check(p, token.RPAREN) {
+		for {
+			if len(args) >= 255 {
+				return nil, errors.NewParseError(peek(p), "Can't have more than 255 arguments.")
+			}
+			arg, err := expression(p)
+			if err != nil {
+				return nil, err
+			}
+			args = append(args, arg)
+			if !match(p, token.COMMA) {
+				break
+			}
+		}
+	}
+	rparen, err := consume(p, token.RPAREN, "Expect ')' after arguments.")
+	if err != nil {
+		return nil, err
+	}
+	return &ast.Call{
+		Callee:    callee,
+		RParen:    rparen,
+		Arguments: args,
+	}, nil
 }
 
 func primary(p *Parser) (ast.Expression, error) {
