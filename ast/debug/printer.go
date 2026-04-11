@@ -58,3 +58,11 @@ func (a *AstPrinter) VisitAssign(expr *ast.Assign) interface{} {
 func (a *AstPrinter) VisitLogical(expr *ast.Logical) interface{} {
 	return a.parenthesize(expr.Operator.Lexeme, expr.Left, expr.Right)
 }
+
+func (a *AstPrinter) VisitCall(expr *ast.Call) interface{} {
+	result := a.parenthesize("call", expr.Callee)
+	for _, arg := range expr.Arguments {
+		result += " " + arg.Accept(a).(string)
+	}
+	return result
+}
