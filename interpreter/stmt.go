@@ -26,7 +26,7 @@ func (i *Interpreter) VisitVarStmt(stmt *ast.VarStmt) {
 
 func (i *Interpreter) VisitBlockStmt(stmt *ast.BlockStmt) {
 	env := environment.NewEnclosed(i.environment)
-	executeBlock(i, stmt.Statements, env)
+	ExecuteBlock(i, stmt.Statements, env)
 }
 
 func (i *Interpreter) VisitIfStmt(stmt *ast.IfStmt) {
@@ -41,4 +41,9 @@ func (i *Interpreter) VisitWhileStmt(stmt *ast.WhileStmt) {
 	for isTruthy(evaluate(stmt.Condition, i)) {
 		execute(stmt.Body, i)
 	}
+}
+
+func (i *Interpreter) VisitFunctionStmt(stmt *ast.FunctionStmt) {
+	function := NewLoxFunction(stmt)
+	environment.Define(i.environment, stmt.Name.Lexeme, function)
 }

@@ -16,6 +16,16 @@ func (b *Binary) Accept(visitor Visitor) interface{} {
 	return visitor.VisitBinary(b)
 }
 
+type Call struct {
+	Callee    Expression
+	RParen    token.Token
+	Arguments []Expression
+}
+
+func (c *Call) Accept(visitor Visitor) interface{} {
+	return visitor.VisitCall(c)
+}
+
 type Grouping struct {
 	Expression Expression
 }

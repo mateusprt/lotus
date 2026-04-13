@@ -7,4 +7,5 @@ type StmtVisitor interface {
 	VisitBlockStmt(stmt *BlockStmt)
 	VisitIfStmt(stmt *IfStmt)
 	VisitWhileStmt(stmt *WhileStmt)
+	VisitFunctionStmt(stmt *FunctionStmt)
 }

@@ -8,4 +8,5 @@ type Visitor interface {
 	VisitVariable(expr *Variable) interface{}
 	VisitAssign(expr *Assign) interface{}
 	VisitLogical(expr *Logical) interface{}
+	VisitCall(expr *Call) interface{}
 }

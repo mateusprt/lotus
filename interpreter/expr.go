@@ -1,6 +1,8 @@
 package interpreter
 
 import (
+	"fmt"
+
 	"github.com/mateusprt/lotus/ast"
 	"github.com/mateusprt/lotus/environment"
 	"github.com/mateusprt/lotus/errors"
@@ -94,4 +96,33 @@ func (i *Interpreter) VisitLogical(expr *ast.Logical) interface{} {
 	}
 
 	return evaluate(expr.Right, i)
+}
+
+func (i *Interpreter) VisitCall(expr *ast.Call) interface{} {
+	callee := evaluate(expr.Callee, i)
+	var arguments []interface{}
+	for _, arg := range expr.Arguments {
+		arguments = append(arguments, evaluate(arg, i))
+	}
+
+	if !isCallable(callee) {
+		errors.ThrowRuntimeError(expr.RParen, "Can only call functions and classes.")
+	}
+
+	function, ok := callee.(Callable)
+	if !ok {
+		errors.ThrowRuntimeError(expr.RParen, "Can only call functions and classes.")
+	}
+
+	if len(arguments) != function.Arity() {
+		message := fmt.Sprintf("Expected %d arguments but got %d.", function.Arity(), len(arguments))
+		errors.ThrowRuntimeError(expr.RParen, message)
+	}
+
+	return function.Call(i, arguments)
+}
+
+func isCallable(value interface{}) bool {
+	_, ok := value.(Callable)
+	return ok
 }
