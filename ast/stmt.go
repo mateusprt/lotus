@@ -57,3 +57,13 @@ type WhileStmt struct {
 func (w *WhileStmt) Accept(visitor StmtVisitor) {
 	visitor.VisitWhileStmt(w)
 }
+
+type FunctionStmt struct {
+	Name   token.Token
+	Params []token.Token
+	Body   []Stmt
+}
+
+func (f *FunctionStmt) Accept(visitor StmtVisitor) {
+	visitor.VisitFunctionStmt(f)
+}

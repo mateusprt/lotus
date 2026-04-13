@@ -79,7 +79,7 @@ func synchronize(p *Parser) {
 
 		switch peek(p).Type {
 		case token.STRUCT,
-			token.FUNCTION,
+			token.FN,
 			token.VAR,
 			token.CONST,
 			token.FOR,
