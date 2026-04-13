@@ -39,7 +39,7 @@ func execute(stmt ast.Stmt, interpreter *Interpreter) {
 	stmt.Accept(interpreter)
 }
 
-func executeBlock(interpreter *Interpreter, statements []ast.Stmt, env *environment.Environment) {
+func ExecuteBlock(interpreter *Interpreter, statements []ast.Stmt, env *environment.Environment) {
 	previous := interpreter.environment
 	interpreter.environment = env
 	defer func() {
