@@ -3,6 +3,7 @@ package interpreter
 import (
 	"github.com/mateusprt/lotus/ast"
 	"github.com/mateusprt/lotus/environment"
+	"github.com/mateusprt/lotus/errors"
 )
 
 type LoxFunction struct {
@@ -14,14 +15,25 @@ func NewLoxFunction(declaration *ast.FunctionStmt) *LoxFunction {
 }
 
 func (f *LoxFunction) Call(i *Interpreter, arguments []interface{}) interface{} {
-	env := environment.NewEnclosed(i.Globals) // ou i.environment, dependendo do contexto
+	env := environment.NewEnclosed(i.Globals)
 
 	for i, param := range f.declaration.Params {
 		environment.Define(env, param.Lexeme, arguments[i])
 	}
 
+	var returnValue interface{} = nil
+	defer func() {
+		if r := recover(); r != nil {
+			if returnErr, ok := r.(*errors.ReturnError); ok {
+				returnValue = returnErr.Value
+			} else {
+				panic(r)
+			}
+		}
+	}()
+
 	ExecuteBlock(i, f.declaration.Body, env)
-	return nil
+	return returnValue
 }
 
 func (f *LoxFunction) Arity() int {

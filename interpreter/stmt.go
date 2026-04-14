@@ -5,6 +5,7 @@ import (
 
 	"github.com/mateusprt/lotus/ast"
 	"github.com/mateusprt/lotus/environment"
+	"github.com/mateusprt/lotus/errors"
 )
 
 func (i *Interpreter) VisitExpressionStmt(stmt *ast.ExpressionStmt) {
@@ -46,4 +47,12 @@ func (i *Interpreter) VisitWhileStmt(stmt *ast.WhileStmt) {
 func (i *Interpreter) VisitFunctionStmt(stmt *ast.FunctionStmt) {
 	function := NewLoxFunction(stmt)
 	environment.Define(i.environment, stmt.Name.Lexeme, function)
+}
+
+func (i *Interpreter) VisitReturnStmt(stmt *ast.ReturnStmt) {
+	var value interface{} = nil
+	if stmt.Value != nil {
+		value = evaluate(stmt.Value, i)
+	}
+	errors.ThrowReturnError(value)
 }

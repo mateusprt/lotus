@@ -54,6 +54,9 @@ func statement(p *Parser) ast.Stmt {
 	if match(p, token.IF) {
 		return ifStatement(p)
 	}
+	if match(p, token.RETURN) {
+		return returnStatement(p)
+	}
 	if match(p, token.PRINT) {
 		return printStatement(p)
 	}
@@ -64,6 +67,20 @@ func statement(p *Parser) ast.Stmt {
 		return &ast.BlockStmt{Statements: block(p)}
 	}
 	return expressionStatement(p)
+}
+
+func returnStatement(p *Parser) ast.Stmt {
+	keyword := previous(p)
+	var value ast.Expression
+	if !check(p, token.SEMICOLON) {
+		expr, err := expression(p)
+		if err != nil {
+			panic(err)
+		}
+		value = expr
+	}
+	consume(p, token.SEMICOLON, "Expect ';' after return value.")
+	return &ast.ReturnStmt{Keyword: keyword, Value: value}
 }
 
 func forStatement(p *Parser) ast.Stmt {
