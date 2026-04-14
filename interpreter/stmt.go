@@ -45,7 +45,7 @@ func (i *Interpreter) VisitWhileStmt(stmt *ast.WhileStmt) {
 }
 
 func (i *Interpreter) VisitFunctionStmt(stmt *ast.FunctionStmt) {
-	function := NewLoxFunction(stmt)
+	function := NewFunction(stmt, i.environment)
 	environment.Define(i.environment, stmt.Name.Lexeme, function)
 }
 

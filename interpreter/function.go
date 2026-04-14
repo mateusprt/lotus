@@ -6,22 +6,21 @@ import (
 	"github.com/mateusprt/lotus/errors"
 )
 
-type LoxFunction struct {
+type Function struct {
 	declaration *ast.FunctionStmt
+	closure     *environment.Environment
 }
 
-func NewLoxFunction(declaration *ast.FunctionStmt) *LoxFunction {
-	return &LoxFunction{declaration: declaration}
+func NewFunction(declaration *ast.FunctionStmt, closure *environment.Environment) *Function {
+	return &Function{declaration: declaration, closure: closure}
 }
 
-func (f *LoxFunction) Call(i *Interpreter, arguments []interface{}) interface{} {
-	env := environment.NewEnclosed(i.Globals)
-
+func (f *Function) Call(i *Interpreter, arguments []interface{}) (returnValue interface{}) {
+	env := environment.NewEnclosed(f.closure)
 	for i, param := range f.declaration.Params {
 		environment.Define(env, param.Lexeme, arguments[i])
 	}
 
-	var returnValue interface{} = nil
 	defer func() {
 		if r := recover(); r != nil {
 			if returnErr, ok := r.(*errors.ReturnError); ok {
@@ -33,13 +32,13 @@ func (f *LoxFunction) Call(i *Interpreter, arguments []interface{}) interface{} 
 	}()
 
 	ExecuteBlock(i, f.declaration.Body, env)
-	return returnValue
+	return
 }
 
-func (f *LoxFunction) Arity() int {
+func (f *Function) Arity() int {
 	return len(f.declaration.Params)
 }
 
-func (f *LoxFunction) String() string {
+func (f *Function) String() string {
 	return "<fn " + f.declaration.Name.Lexeme + ">"
 }
