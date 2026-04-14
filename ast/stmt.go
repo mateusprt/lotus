@@ -67,3 +67,12 @@ type FunctionStmt struct {
 func (f *FunctionStmt) Accept(visitor StmtVisitor) {
 	visitor.VisitFunctionStmt(f)
 }
+
+type ReturnStmt struct {
+	Keyword token.Token
+	Value   Expression
+}
+
+func (r *ReturnStmt) Accept(visitor StmtVisitor) {
+	visitor.VisitReturnStmt(r)
+}

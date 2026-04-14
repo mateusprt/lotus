@@ -16,6 +16,10 @@ type ParseError struct {
 	Message string
 }
 
+type ReturnError struct {
+	Value interface{}
+}
+
 func (e *ParseError) Error() string {
 	return e.Message
 }
@@ -41,4 +45,8 @@ func ThrowRuntimeError(tok token.Token, message string) {
 
 func PrintRuntimeError(err *RuntimeError) {
 	fmt.Printf("[line %d] RuntimeError: %s\n", err.Token.Line, err.Message)
+}
+
+func ThrowReturnError(value interface{}) {
+	panic(&ReturnError{Value: value})
 }
