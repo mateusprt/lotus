@@ -1,16 +1,42 @@
 package resolver
 
-import "github.com/mateusprt/lotus/ast"
+import (
+	"github.com/mateusprt/lotus/ast"
+	"github.com/mateusprt/lotus/token"
+)
 
 func (r *Resolver) VisitExpressionStmt(stmt *ast.ExpressionStmt) {
+	resolveExpr(r, stmt.Expression)
 }
 
 func (r *Resolver) VisitPrintStmt(stmt *ast.PrintStmt) {
-
+	resolveExpr(r, stmt.Expression)
 }
 
 func (r *Resolver) VisitVarStmt(stmt *ast.VarStmt) {
+	declare(r, stmt.Name)
+	if stmt.Initializer != nil {
+		resolveExpr(r, stmt.Initializer)
+	}
 
+	define(r, stmt.Name)
+}
+
+func declare(r *Resolver, name token.Token) {
+	if r.scopes.IsEmpty() {
+		return
+	}
+
+	scope := r.scopes.Peek()
+	scope[name.Lexeme] = false
+}
+
+func define(r *Resolver, name token.Token) {
+	if r.scopes.IsEmpty() {
+		return
+	}
+
+	r.scopes.Peek()[name.Lexeme] = true
 }
 
 func (r *Resolver) VisitBlockStmt(stmt *ast.BlockStmt) {
@@ -21,16 +47,29 @@ func (r *Resolver) VisitBlockStmt(stmt *ast.BlockStmt) {
 }
 
 func (r *Resolver) VisitIfStmt(stmt *ast.IfStmt) {
+	resolveExpr(r, stmt.Condition)
+	resolveStmt(r, stmt.Then)
+	if stmt.Else != nil {
+		resolveStmt(r, stmt.Else)
+	}
 }
 
 func (r *Resolver) VisitWhileStmt(stmt *ast.WhileStmt) {
+	resolveExpr(r, stmt.Condition)
+	resolveStmt(r, stmt.Body)
 }
 
 func (r *Resolver) VisitFunctionStmt(stmt *ast.FunctionStmt) {
+	declare(r, stmt.Name)
+	define(r, stmt.Name)
+
+	resolveFunction(r, stmt)
 }
 
 func (r *Resolver) VisitReturnStmt(stmt *ast.ReturnStmt) {
-
+	if stmt.Value != nil {
+		resolveExpr(r, stmt.Value)
+	}
 }
 
 func Resolve(r *Resolver, statements []ast.Stmt) {
@@ -53,4 +92,14 @@ func beginScope(r *Resolver) {
 
 func endScope(r *Resolver) {
 	r.scopes.Pop()
+}
+
+func resolveFunction(r *Resolver, function *ast.FunctionStmt) {
+	beginScope(r)
+	for _, param := range function.Params {
+		declare(r, param)
+		define(r, param)
+	}
+	Resolve(r, function.Body)
+	endScope(r)
 }

@@ -13,6 +13,7 @@ import (
 type Interpreter struct {
 	Globals     *environment.Environment
 	environment *environment.Environment
+	locals      map[ast.Expression]int
 }
 
 func New(e *environment.Environment) *Interpreter {
@@ -139,4 +140,8 @@ func stringify(value interface{}) string {
 	default:
 		return fmt.Sprintf("%v", value)
 	}
+}
+
+func (i *Interpreter) Resolve(expr ast.Expression, depth int) {
+	i.locals[expr] = depth
 }

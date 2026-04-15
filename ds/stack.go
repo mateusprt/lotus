@@ -37,3 +37,11 @@ func (s *Stack[T]) IsEmpty() bool {
 func (s *Stack[T]) Size() int {
 	return len(s.values)
 }
+
+func (s *Stack[T]) Get(index int) T {
+	if index < 0 || index >= len(s.values) {
+		var zero T
+		return zero
+	}
+	return s.values[index]
+}
