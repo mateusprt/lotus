@@ -43,7 +43,6 @@ func (r *Resolver) VisitBlockStmt(stmt *ast.BlockStmt) {
 	beginScope(r)
 	Resolve(r, stmt.Statements)
 	endScope(r)
-	return
 }
 
 func (r *Resolver) VisitIfStmt(stmt *ast.IfStmt) {
@@ -69,12 +68,6 @@ func (r *Resolver) VisitFunctionStmt(stmt *ast.FunctionStmt) {
 func (r *Resolver) VisitReturnStmt(stmt *ast.ReturnStmt) {
 	if stmt.Value != nil {
 		resolveExpr(r, stmt.Value)
-	}
-}
-
-func Resolve(r *Resolver, statements []ast.Stmt) {
-	for _, statement := range statements {
-		resolveStmt(r, statement)
 	}
 }
 

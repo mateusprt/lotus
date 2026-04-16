@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/mateusprt/lotus/environment"
+	"github.com/mateusprt/lotus/environment/resolver"
 	"github.com/mateusprt/lotus/interpreter"
 	"github.com/mateusprt/lotus/interpreter/functions"
 	"github.com/mateusprt/lotus/parser"
@@ -73,5 +74,8 @@ func run(byteSequence []byte, interp *interpreter.Interpreter) {
 	tokens := scanner.ScanTokens(sc)
 	p := parser.New(tokens)
 	statements := parser.Parse(p)
+
+	res := resolver.New(interp)
+	resolver.Resolve(res, statements)
 	interp.Interpret(statements)
 }

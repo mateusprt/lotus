@@ -61,9 +61,10 @@ const (
 	FIRST  = "FIRST"
 	LAST   = "LAST"
 	PUSH   = "PUSH"
-	TRUE   = "TRUE"
-	FALSE  = "FALSE"
-	NULL   = "NULL"
-	AND    = "AND"
-	OR     = "OR"
+	// adicionar POP
+	TRUE  = "TRUE"
+	FALSE = "FALSE"
+	NULL  = "NULL"
+	AND   = "AND"
+	OR    = "OR"
 )
