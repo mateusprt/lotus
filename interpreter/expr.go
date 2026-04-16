@@ -73,7 +73,15 @@ func (i *Interpreter) VisitUnary(expr *ast.Unary) interface{} {
 }
 
 func (i *Interpreter) VisitVariable(expr *ast.Variable) interface{} {
-	return environment.Get(i.environment, expr.Name)
+	return lookUpVariable(i, expr.Name, expr)
+}
+
+func lookUpVariable(i *Interpreter, name token.Token, expr ast.Expression) interface{} {
+	distance, ok := i.locals[expr]
+	if ok {
+		return environment.GetAt(i.environment, distance, name.Lexeme)
+	}
+	return environment.Get(i.environment, name)
 }
 
 func (i *Interpreter) VisitAssign(expr *ast.Assign) interface{} {

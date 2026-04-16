@@ -31,6 +31,22 @@ func Get(e *Environment, name token.Token) interface{} {
 	return nil
 }
 
+func GetAt(e *Environment, distance int, name string) interface{} {
+	return ancestor(e, distance).values[name]
+}
+
+func ancestor(e *Environment, distance int) *Environment {
+	env := e
+	for i := 0; i < distance; i++ {
+		env = env.enclosing
+	}
+	return env
+}
+
+func AssignAt(e *Environment, distance int, name token.Token, value interface{}) {
+	ancestor(e, distance).values[name.Lexeme] = value
+}
+
 func Assign(e *Environment, name token.Token, value interface{}) {
 	if _, ok := e.values[name.Lexeme]; ok {
 		e.values[name.Lexeme] = value

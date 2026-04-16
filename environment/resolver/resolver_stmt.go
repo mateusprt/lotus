@@ -2,6 +2,7 @@ package resolver
 
 import (
 	"github.com/mateusprt/lotus/ast"
+	"github.com/mateusprt/lotus/errors"
 	"github.com/mateusprt/lotus/token"
 )
 
@@ -28,6 +29,9 @@ func declare(r *Resolver, name token.Token) {
 	}
 
 	scope := r.scopes.Peek()
+	if _, ok := scope[name.Lexeme]; ok {
+		errors.Error("Variable with this name already declared in this scope.")
+	}
 	scope[name.Lexeme] = false
 }
 
@@ -43,7 +47,6 @@ func (r *Resolver) VisitBlockStmt(stmt *ast.BlockStmt) {
 	beginScope(r)
 	Resolve(r, stmt.Statements)
 	endScope(r)
-	return
 }
 
 func (r *Resolver) VisitIfStmt(stmt *ast.IfStmt) {
@@ -63,18 +66,12 @@ func (r *Resolver) VisitFunctionStmt(stmt *ast.FunctionStmt) {
 	declare(r, stmt.Name)
 	define(r, stmt.Name)
 
-	resolveFunction(r, stmt)
+	resolveFunction(r, stmt, Function)
 }
 
 func (r *Resolver) VisitReturnStmt(stmt *ast.ReturnStmt) {
 	if stmt.Value != nil {
 		resolveExpr(r, stmt.Value)
-	}
-}
-
-func Resolve(r *Resolver, statements []ast.Stmt) {
-	for _, statement := range statements {
-		resolveStmt(r, statement)
 	}
 }
 
@@ -94,7 +91,10 @@ func endScope(r *Resolver) {
 	r.scopes.Pop()
 }
 
-func resolveFunction(r *Resolver, function *ast.FunctionStmt) {
+func resolveFunction(r *Resolver, function *ast.FunctionStmt, functionType FunctionType) {
+	enclosingFunction := r.currentFunction
+	r.currentFunction = functionType
+
 	beginScope(r)
 	for _, param := range function.Params {
 		declare(r, param)
@@ -102,4 +102,5 @@ func resolveFunction(r *Resolver, function *ast.FunctionStmt) {
 	}
 	Resolve(r, function.Body)
 	endScope(r)
+	r.currentFunction = enclosingFunction
 }

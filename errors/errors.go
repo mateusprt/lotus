@@ -24,6 +24,10 @@ func (e *ParseError) Error() string {
 	return e.Message
 }
 
+func Error(message string) {
+	report(message)
+}
+
 func NewParseError(currentToken token.Token, message string) *ParseError {
 	errorMessage := fmt.Sprintf("%d at end: %s", currentToken.Line, message)
 	if currentToken.Type == token.EOF {
