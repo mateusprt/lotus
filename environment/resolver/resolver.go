@@ -6,9 +6,17 @@ import (
 	"github.com/mateusprt/lotus/interpreter"
 )
 
+type FunctionType int
+
+const (
+	NoneFunction FunctionType = iota
+	Function
+)
+
 type Resolver struct {
-	interpreter *interpreter.Interpreter
-	scopes      *ds.Stack[map[string]bool]
+	interpreter     *interpreter.Interpreter
+	scopes          *ds.Stack[map[string]bool]
+	currentFunction FunctionType
 }
 
 func New(interpreter *interpreter.Interpreter) *Resolver {
