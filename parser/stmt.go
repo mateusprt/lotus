@@ -16,6 +16,9 @@ func declaration(p *Parser) ast.Stmt {
 			}
 		}
 	}()
+	if match(p, token.STRUCT) {
+		return structDeclaration(p)
+	}
 	if match(p, token.FN) {
 		return function(p, "function")
 	}
@@ -23,6 +26,19 @@ func declaration(p *Parser) ast.Stmt {
 		return varDeclaration(p)
 	}
 	return statement(p)
+}
+
+func structDeclaration(p *Parser) ast.Stmt {
+	name, _ := consume(p, token.IDENTIFIER, "Expect struct name.")
+	consume(p, token.LBRACE, "Expect '{' after struct name.")
+	var fields []token.Token
+	for !check(p, token.RBRACE) && !isAtEnd(p) {
+		field, _ := consume(p, token.IDENTIFIER, "Expect field name.")
+		fields = append(fields, field)
+		consume(p, token.SEMICOLON, "Expect ';' after field declaration.")
+	}
+	consume(p, token.RBRACE, "Expect '}' after struct body.")
+	return &ast.StructStmt{Name: name, Fields: fields}
 }
 
 func function(p *Parser, kind string) *ast.FunctionStmt {

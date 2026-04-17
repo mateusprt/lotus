@@ -76,3 +76,12 @@ type ReturnStmt struct {
 func (r *ReturnStmt) Accept(visitor StmtVisitor) {
 	visitor.VisitReturnStmt(r)
 }
+
+type StructStmt struct {
+	Name   token.Token
+	Fields []token.Token
+}
+
+func (s *StructStmt) Accept(visitor StmtVisitor) {
+	visitor.VisitStructStmt(s)
+}

@@ -66,3 +66,7 @@ func (a *AstPrinter) VisitCall(expr *ast.Call) interface{} {
 	}
 	return result
 }
+
+func (a *AstPrinter) VisitGet(expr *ast.Get) interface{} {
+	return a.parenthesize("get "+expr.Name.Lexeme, expr.Object)
+}

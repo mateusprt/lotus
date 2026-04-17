@@ -104,3 +104,8 @@ func resolveFunction(r *Resolver, function *ast.FunctionStmt, functionType Funct
 	endScope(r)
 	r.currentFunction = enclosingFunction
 }
+
+func (r *Resolver) VisitStructStmt(stmt *ast.StructStmt) {
+	declare(r, stmt.Name)
+	define(r, stmt.Name)
+}
