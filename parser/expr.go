@@ -188,6 +188,9 @@ func call(p *Parser) (ast.Expression, error) {
 			if err != nil {
 				return nil, err
 			}
+		} else if match(p, token.DOT) {
+			name, _ := consume(p, token.IDENTIFIER, "Expect property name after '.'.")
+			expr = &ast.Get{Object: expr, Name: name}
 		} else {
 			break
 		}

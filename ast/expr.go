@@ -77,3 +77,12 @@ type Logical struct {
 func (l *Logical) Accept(visitor Visitor) interface{} {
 	return visitor.VisitLogical(l)
 }
+
+type Get struct {
+	Object Expression
+	Name   token.Token
+}
+
+func (g *Get) Accept(visitor Visitor) interface{} {
+	return visitor.VisitGet(g)
+}

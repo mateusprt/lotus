@@ -9,4 +9,5 @@ type Visitor interface {
 	VisitAssign(expr *Assign) interface{}
 	VisitLogical(expr *Logical) interface{}
 	VisitCall(expr *Call) interface{}
+	VisitGet(expr *Get) interface{}
 }

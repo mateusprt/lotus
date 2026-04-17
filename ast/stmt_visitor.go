@@ -9,4 +9,5 @@ type StmtVisitor interface {
 	VisitWhileStmt(stmt *WhileStmt)
 	VisitFunctionStmt(stmt *FunctionStmt)
 	VisitReturnStmt(stmt *ReturnStmt)
+	VisitStructStmt(stmt *StructStmt)
 }

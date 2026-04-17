@@ -28,3 +28,8 @@ func Resolve(r *Resolver, statements []ast.Stmt) {
 		resolveStmt(r, statement)
 	}
 }
+
+func (r *Resolver) VisitGet(expr *ast.Get) interface{} {
+	resolveExpr(r, expr.Object)
+	return nil
+}

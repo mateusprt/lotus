@@ -134,3 +134,12 @@ func isCallable(value interface{}) bool {
 	_, ok := value.(Callable)
 	return ok
 }
+
+func (i *Interpreter) VisitGet(expr *ast.Get) interface{} {
+	object := evaluate(expr.Object, i)
+	if instance, ok := object.(*StructInstance); ok {
+		return instance.Get(expr.Name)
+	}
+	errors.ThrowRuntimeError(expr.Name, "Only instances have properties.")
+	return nil
+}
