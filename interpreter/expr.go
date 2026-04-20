@@ -143,3 +143,14 @@ func (i *Interpreter) VisitGet(expr *ast.Get) interface{} {
 	errors.ThrowRuntimeError(expr.Name, "Only instances have properties.")
 	return nil
 }
+
+func (i *Interpreter) VisitSet(expr *ast.Set) interface{} {
+	object := evaluate(expr.Object, i)
+	if instance, ok := object.(*LotusInstance); ok {
+		value := evaluate(expr.Value, i)
+		instance.Set(expr.Name, value)
+		return value
+	}
+	errors.ThrowRuntimeError(expr.Name, "Only instances have fields.")
+	return nil
+}
