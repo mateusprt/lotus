@@ -154,3 +154,62 @@ func (i *Interpreter) VisitSet(expr *ast.Set) interface{} {
 	errors.ThrowRuntimeError(expr.Name, "Only instances have fields.")
 	return nil
 }
+
+func (i *Interpreter) VisitArrayLiteral(expr *ast.ArrayLiteral) interface{} {
+	var result []interface{}
+	for _, elem := range expr.Elements {
+		result = append(result, evaluate(elem, i))
+	}
+	return result
+}
+
+func (i *Interpreter) VisitIndex(expr *ast.Index) interface{} {
+	object := evaluate(expr.Object, i)
+	index := evaluate(expr.Index, i)
+	arr, ok := object.([]interface{})
+	if !ok {
+		panic("Only arrays can be indexed.")
+	}
+	idx, ok := index.(float64)
+	if !ok {
+		panic("Index must be a number.")
+	}
+
+	intIdx := int(idx)
+	if intIdx < 0 || intIdx >= len(arr) {
+		panic(fmt.Sprintf("Array index %d out of bounds (size: %d).", intIdx, len(arr)))
+	}
+	fmt.Println("visitIndex")
+	return arr[intIdx]
+}
+
+func (i *Interpreter) VisitIndexAssign(expr *ast.IndexAssign) interface{} {
+	object := evaluate(expr.Object, i)
+	index := evaluate(expr.Index, i)
+	value := evaluate(expr.Value, i)
+
+	arr, ok := object.([]interface{})
+	if !ok {
+		panic("Only arrays can be indexed for assignment.")
+	}
+	idx, ok := index.(float64)
+	if !ok {
+		panic("Index must be a number.")
+	}
+	intIdx := int(idx)
+	if intIdx < 0 {
+		panic(fmt.Sprintf("Array index %d out of bounds (size: %d).", intIdx, len(arr)))
+	}
+	if intIdx == len(arr) {
+		arr = append(arr, value)
+		// Atualize a variável no ambiente!
+		if variable, ok := expr.Object.(*ast.Variable); ok {
+			environment.Assign(i.environment, variable.Name, arr)
+		}
+	} else if intIdx < len(arr) {
+		arr[intIdx] = value
+	} else {
+		panic(fmt.Sprintf("Array index %d out of bounds (size: %d).", intIdx, len(arr)))
+	}
+	return value
+}

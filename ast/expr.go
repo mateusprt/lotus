@@ -1,6 +1,8 @@
 package ast
 
-import "github.com/mateusprt/lotus/token"
+import (
+	"github.com/mateusprt/lotus/token"
+)
 
 type Expression interface {
 	Accept(visitor Visitor) interface{}
@@ -95,4 +97,31 @@ type Set struct {
 
 func (s *Set) Accept(visitor Visitor) interface{} {
 	return visitor.VisitSet(s)
+}
+
+type ArrayLiteral struct {
+	Elements []Expression
+}
+
+func (a *ArrayLiteral) Accept(visitor Visitor) interface{} {
+	return visitor.VisitArrayLiteral(a)
+}
+
+type Index struct {
+	Object Expression
+	Index  Expression
+}
+
+func (i *Index) Accept(visitor Visitor) interface{} {
+	return visitor.VisitIndex(i)
+}
+
+type IndexAssign struct {
+	Object Expression
+	Index  Expression
+	Value  Expression
+}
+
+func (ia *IndexAssign) Accept(visitor Visitor) interface{} {
+	return visitor.VisitIndexAssign(ia)
 }
