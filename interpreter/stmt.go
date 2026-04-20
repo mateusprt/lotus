@@ -56,3 +56,13 @@ func (i *Interpreter) VisitReturnStmt(stmt *ast.ReturnStmt) {
 	}
 	errors.ThrowReturnError(value)
 }
+
+func (i *Interpreter) VisitStructStmt(stmt *ast.StructStmt) {
+	environment.Define(i.environment, stmt.Name.Lexeme, nil)
+	var fields []string
+	for _, field := range stmt.Fields {
+		fields = append(fields, field.Lexeme)
+	}
+	instance := NewLotusStruct(stmt.Name.Lexeme, fields)
+	environment.Assign(i.environment, stmt.Name, instance)
+}

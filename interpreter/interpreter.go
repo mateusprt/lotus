@@ -145,9 +145,3 @@ func stringify(value interface{}) string {
 func (i *Interpreter) Resolve(expr ast.Expression, depth int) {
 	i.locals[expr] = depth
 }
-
-func (i *Interpreter) VisitStructStmt(stmt *ast.StructStmt) {
-	environment.Define(i.environment, stmt.Name.Lexeme, nil)
-	instance := NewStructName(stmt.Name.Lexeme)
-	environment.Assign(i.environment, stmt.Name, instance)
-}
