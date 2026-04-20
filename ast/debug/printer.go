@@ -70,3 +70,23 @@ func (a *AstPrinter) VisitCall(expr *ast.Call) interface{} {
 func (a *AstPrinter) VisitGet(expr *ast.Get) interface{} {
 	return a.parenthesize("get "+expr.Name.Lexeme, expr.Object)
 }
+
+func (a *AstPrinter) VisitSet(expr *ast.Set) interface{} {
+	return a.parenthesize("set "+expr.Name.Lexeme, expr.Object, expr.Value)
+}
+
+func (a *AstPrinter) VisitArrayLiteral(expr *ast.ArrayLiteral) interface{} {
+	result := "(array"
+	for _, element := range expr.Elements {
+		result += " " + element.Accept(a).(string)
+	}
+	return result + ")"
+}
+
+func (a *AstPrinter) VisitIndex(expr *ast.Index) interface{} {
+	return a.parenthesize("index", expr.Object, expr.Index)
+}
+
+func (a *AstPrinter) VisitIndexAssign(expr *ast.IndexAssign) interface{} {
+	return a.parenthesize("index-assign", expr.Object, expr.Index, expr.Value)
+}
