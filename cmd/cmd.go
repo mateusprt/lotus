@@ -21,6 +21,7 @@ func RunPrompt() {
 	env := environment.New()
 	interp := interpreter.New(env)
 	environment.Define(env, "now", &functions.NowFunction{})
+	environment.Define(env, "len", &functions.LenFunction{})
 
 	var buffer []byte
 	openBraces := 0

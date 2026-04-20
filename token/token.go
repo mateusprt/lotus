@@ -57,7 +57,6 @@ const (
 	FN     = "FN"
 	RETURN = "RETURN"
 	STRUCT = "STRUCT"
-	LEN    = "LEN"
 	FIRST  = "FIRST"
 	LAST   = "LAST"
 	PUSH   = "PUSH"
