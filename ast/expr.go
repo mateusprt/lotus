@@ -86,3 +86,13 @@ type Get struct {
 func (g *Get) Accept(visitor Visitor) interface{} {
 	return visitor.VisitGet(g)
 }
+
+type Set struct {
+	Object Expression
+	Name   token.Token
+	Value  Expression
+}
+
+func (s *Set) Accept(visitor Visitor) interface{} {
+	return visitor.VisitSet(s)
+}

@@ -30,6 +30,10 @@ func assignment(p *Parser) (ast.Expression, error) {
 			token := variable.Name
 			return &ast.Assign{Name: token, Value: value}, nil
 		}
+
+		if get, ok := expr.(*ast.Get); ok {
+			return &ast.Set{Object: get.Object, Name: get.Name, Value: value}, nil
+		}
 		return nil, errors.NewParseError(equals, "Invalid assignment target.")
 	}
 	return expr, nil

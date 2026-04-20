@@ -54,6 +54,12 @@ func (r *Resolver) VisitCall(expr *ast.Call) interface{} {
 	return nil
 }
 
+func (r *Resolver) VisitSet(expr *ast.Set) interface{} {
+	resolveExpr(r, expr.Value)
+	resolveExpr(r, expr.Object)
+	return nil
+}
+
 func resolveLocal(r *Resolver, expr ast.Expression, name token.Token) {
 	for i := r.scopes.Size() - 1; i >= 0; i-- {
 		if _, ok := r.scopes.Get(i)[name.Lexeme]; ok {

@@ -10,4 +10,5 @@ type Visitor interface {
 	VisitLogical(expr *Logical) interface{}
 	VisitCall(expr *Call) interface{}
 	VisitGet(expr *Get) interface{}
+	VisitSet(expr *Set) interface{}
 }
