@@ -11,4 +11,7 @@ type Visitor interface {
 	VisitCall(expr *Call) interface{}
 	VisitGet(expr *Get) interface{}
 	VisitSet(expr *Set) interface{}
+	VisitArrayLiteral(expr *ArrayLiteral) interface{}
+	VisitIndex(expr *Index) interface{}
+	VisitIndexAssign(expr *IndexAssign) interface{}
 }

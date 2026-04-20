@@ -35,7 +35,7 @@ func (r *Resolver) VisitVariable(expr *ast.Variable) interface{} {
 }
 
 func (r *Resolver) VisitAssign(expr *ast.Assign) interface{} {
-	resolveExpr(r, expr)
+	resolveExpr(r, expr.Value)
 	resolveLocal(r, expr, expr.Name)
 	return nil
 }
@@ -67,4 +67,24 @@ func resolveLocal(r *Resolver, expr ast.Expression, name token.Token) {
 			return
 		}
 	}
+}
+
+func (r *Resolver) VisitArrayLiteral(expr *ast.ArrayLiteral) interface{} {
+	for _, element := range expr.Elements {
+		resolveExpr(r, element)
+	}
+	return nil
+}
+
+func (r *Resolver) VisitIndex(expr *ast.Index) interface{} {
+	resolveExpr(r, expr.Object)
+	resolveExpr(r, expr.Index)
+	return nil
+}
+
+func (r *Resolver) VisitIndexAssign(expr *ast.IndexAssign) interface{} {
+	resolveExpr(r, expr.Object)
+	resolveExpr(r, expr.Index)
+	resolveExpr(r, expr.Value)
+	return nil
 }

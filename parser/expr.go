@@ -34,6 +34,14 @@ func assignment(p *Parser) (ast.Expression, error) {
 		if get, ok := expr.(*ast.Get); ok {
 			return &ast.Set{Object: get.Object, Name: get.Name, Value: value}, nil
 		}
+
+		if index, ok := expr.(*ast.Index); ok {
+			return &ast.IndexAssign{
+				Object: index.Object,
+				Index:  index.Index,
+				Value:  value,
+			}, nil
+		}
 		return nil, errors.NewParseError(equals, "Invalid assignment target.")
 	}
 	return expr, nil
@@ -195,6 +203,13 @@ func call(p *Parser) (ast.Expression, error) {
 		} else if match(p, token.DOT) {
 			name, _ := consume(p, token.IDENTIFIER, "Expect property name after '.'.")
 			expr = &ast.Get{Object: expr, Name: name}
+		} else if match(p, token.LBRACKET) {
+			index, err := expression(p)
+			if err != nil {
+				return nil, err
+			}
+			consume(p, token.RBRACKET, "Expect ']' after index.")
+			expr = &ast.Index{Object: expr, Index: index}
 		} else {
 			break
 		}
@@ -262,5 +277,25 @@ func primary(p *Parser) (ast.Expression, error) {
 		consume(p, token.RPAREN, "Expect ')' after expression.")
 		return &ast.Grouping{Expression: expr}, nil
 	}
+	if match(p, token.LBRACKET) {
+		var elements []ast.Expression
+		if !check(p, token.RBRACKET) {
+			element, err := expression(p)
+			if err != nil {
+				return nil, err
+			}
+			elements = append(elements, element)
+			for match(p, token.COMMA) {
+				element, err := expression(p)
+				if err != nil {
+					return nil, err
+				}
+				elements = append(elements, element)
+			}
+		}
+		consume(p, token.RBRACKET, "Expect ']' after array elements.")
+		return &ast.ArrayLiteral{Elements: elements}, nil
+	}
+
 	return nil, errors.NewParseError(peek(p), "Expect expression.")
 }
