@@ -83,17 +83,9 @@ func scanToken(s *Scanner) {
 			addToken(s, token.ASSIGN)
 		}
 	case "+":
-		if advanceIfMatch(s, "+") {
-			addToken(s, token.INCREMENT)
-		} else {
-			addToken(s, token.PLUS)
-		}
+		addToken(s, token.PLUS)
 	case "-":
-		if advanceIfMatch(s, "-") {
-			addToken(s, token.DECREMENT)
-		} else {
-			addToken(s, token.MINUS)
-		}
+		addToken(s, token.MINUS)
 	case "*":
 		addToken(s, token.STAR)
 	case "/":

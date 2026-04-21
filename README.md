@@ -1,12 +1,14 @@
-# 🪷 Lotus Programming Language
+# Lotus Programming Language
 
 A simple and intuitive programming language.
 
-## 📋 About
+## About
 
 Lotus is an interpreted programming language that combines syntactic simplicity with powerful features. Designed to be easy to learn and use while maintaining the ability to express complex logic.
 
-## ✨ Features
+Inspired by languages like Javascript, Lua and Python, Lotus aims to combine the best of different paradigms in an accessible and expressive syntax.
+
+## Features
 
 - **Clean and intuitive syntax**
 - **Dynamic typing**
@@ -17,11 +19,11 @@ Lotus is an interpreted programming language that combines syntactic simplicity 
 - **Closures support**
 - **Built-in functions** for common operations
 
-## 📚 Documentation
+## Documentation
 
 For instalation, detailed documentation and language reference, visit the [Lotus Documentation](#).
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Feel free to:
 
@@ -31,14 +33,10 @@ Contributions are welcome! Feel free to:
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License. See the `LICENSE` file for details.
 
-## 🙏 Acknowledgments
-
-Inspired by languages like Lua and Python, Lotus aims to combine the best of different paradigms in an accessible and expressive syntax.
-
 ---
 
-⭐ If you enjoyed this project, consider giving it a star!
+If you enjoyed this project, consider giving it a star!
