@@ -22,21 +22,3 @@ Inspired by languages like Javascript, Lua and Python, Lotus aims to combine the
 ## Documentation
 
 For instalation, detailed documentation and language reference, visit the [Lotus Documentation](https://mateusprt.github.io/lotus-documentation/).
-
-## Contributing
-
-Contributions are welcome! Feel free to:
-
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License. See the `LICENSE` file for details.
-
----
-
-If you enjoyed this project, consider giving it a star!
