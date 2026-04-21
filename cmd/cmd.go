@@ -23,6 +23,7 @@ func RunPrompt() {
 	environment.Define(env, "now", &functions.NowFunction{})
 	environment.Define(env, "len", &functions.LenFunction{})
 	environment.Define(env, "first", &functions.FirstFunction{})
+	environment.Define(env, "last", &functions.LastFunction{})
 
 	var buffer []byte
 	openBraces := 0

@@ -57,7 +57,6 @@ const (
 	FN     = "FN"
 	RETURN = "RETURN"
 	STRUCT = "STRUCT"
-	LAST   = "LAST"
 	PUSH   = "PUSH"
 	// adicionar POP
 	TRUE  = "TRUE"
