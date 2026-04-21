@@ -57,11 +57,9 @@ const (
 	FN     = "FN"
 	RETURN = "RETURN"
 	STRUCT = "STRUCT"
-	PUSH   = "PUSH"
-	// adicionar POP
-	TRUE  = "TRUE"
-	FALSE = "FALSE"
-	NULL  = "NULL"
-	AND   = "AND"
-	OR    = "OR"
+	TRUE   = "TRUE"
+	FALSE  = "FALSE"
+	NULL   = "NULL"
+	AND    = "AND"
+	OR     = "OR"
 )
