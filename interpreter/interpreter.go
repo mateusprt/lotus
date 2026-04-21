@@ -17,7 +17,7 @@ type Interpreter struct {
 }
 
 func New(e *environment.Environment) *Interpreter {
-	return &Interpreter{Globals: e, environment: e}
+	return &Interpreter{Globals: e, environment: e, locals: make(map[ast.Expression]int)}
 }
 
 func (i *Interpreter) Interpret(statements []ast.Stmt) {
