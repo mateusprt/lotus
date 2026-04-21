@@ -39,6 +39,10 @@ func (s *LotusInstance) Set(name token.Token, value interface{}) {
 	s.fields[name.Lexeme] = value
 }
 
+func (s *LotusInstance) SetField(name string, value interface{}) {
+	s.fields[name] = value
+}
+
 func NewStructInstance(str *LotusStruct) *LotusInstance {
 	fields := make(map[string]interface{})
 	for _, field := range str.Fields {

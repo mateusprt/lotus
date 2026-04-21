@@ -25,8 +25,6 @@ var keywords = map[string]token.TokenType{
 	"fn":     token.FN,
 	"return": token.RETURN,
 	"struct": token.STRUCT,
-	"last":   token.LAST,
-	"push":   token.PUSH,
 	"true":   token.TRUE,
 	"false":  token.FALSE,
 	"null":   token.NULL,
