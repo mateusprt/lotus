@@ -21,7 +21,7 @@ Inspired by languages like Javascript, Lua and Python, Lotus aims to combine the
 
 ## Documentation
 
-For instalation, detailed documentation and language reference, visit the [Lotus Documentation](#).
+For instalation, detailed documentation and language reference, visit the [Lotus Documentation](https://mateusprt.github.io/lotus-documentation/).
 
 ## Contributing
 
