@@ -21,9 +21,9 @@ Inspired by languages like Javascript, Lua and Python, Lotus aims to combine the
 
 ## Instalation
 
-- [Linux](https://github.com/mateusprt/lotus/releases/download/1.0/linux.zip
-- [MacOS](https://github.com/mateusprt/lotus/releases/download/1.0/mac.zip
-- [Windows](https://github.com/mateusprt/lotus/releases/download/1.0/windows.zip
+- [Linux](https://github.com/mateusprt/lotus/releases/download/1.0/linux.zip)
+- [MacOS](https://github.com/mateusprt/lotus/releases/download/1.0/mac.zip)
+- [Windows](https://github.com/mateusprt/lotus/releases/download/1.0/windows.zip)
 
 ## Documentation
 
