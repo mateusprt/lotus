@@ -19,6 +19,12 @@ Inspired by languages like Javascript, Lua and Python, Lotus aims to combine the
 - **Closures support**
 - **Built-in functions** for common operations
 
+## Instalation
+
+- [Linux](https://github.com/mateusprt/lotus/releases/download/1.0/linux.zip
+- [MacOS](https://github.com/mateusprt/lotus/releases/download/1.0/mac.zip
+- [Windows](https://github.com/mateusprt/lotus/releases/download/1.0/windows.zip
+
 ## Documentation
 
 For instalation, detailed documentation and language reference, visit the [Lotus Documentation](https://mateusprt.github.io/lotus-documentation/).
