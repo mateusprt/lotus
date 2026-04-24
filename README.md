@@ -13,11 +13,8 @@ Inspired by languages like Javascript and Lua, Lotus aims to combine the best of
 - **Clean and intuitive syntax**
 - **Dynamic typing**
 - **First-class functions**
-- **Native data structures** (arrays and structs)
-- **Interactive REPL** for quick experimentation
-- **Static scope resolution** for better performance
-- **Closures support**
-- **Built-in functions** for common operations
+- **Native data structures**
+- **Built-in functions**
 
 ## Instalation
 
