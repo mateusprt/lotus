@@ -6,7 +6,7 @@ A simple and intuitive programming language.
 
 Lotus is an interpreted programming language that combines syntactic simplicity with powerful features. Designed to be easy to learn and use while maintaining the ability to express complex logic.
 
-Inspired by languages like Javascript, Lua and Python, Lotus aims to combine the best of different paradigms in an accessible and expressive syntax.
+Inspired by languages like Javascript and Lua, Lotus aims to combine the best of different paradigms in an accessible and expressive syntax.
 
 ## Features
 
