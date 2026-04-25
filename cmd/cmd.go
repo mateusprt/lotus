@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"bufio"
 	"fmt"
 	"io"
 	"os"
@@ -12,12 +11,17 @@ import (
 	"github.com/mateusprt/lotus/interpreter/functions"
 	"github.com/mateusprt/lotus/parser"
 	"github.com/mateusprt/lotus/scanner"
+	"github.com/peterh/liner"
 )
 
 func RunPrompt() {
 	fmt.Println("Welcome to the Lotus REPL!")
 	fmt.Println("Press Ctrl+D to exit.")
-	reader := bufio.NewReader(os.Stdin)
+
+	lineReader := liner.NewLiner()
+	defer lineReader.Close()
+	lineReader.SetCtrlCAborts(true)
+
 	env := environment.New()
 	interp := interpreter.New(env)
 	environment.Define(env, "now", &functions.NowFunction{})
@@ -27,24 +31,31 @@ func RunPrompt() {
 	environment.Define(env, "push", &functions.PushFunction{})
 	environment.Define(env, "pop", &functions.PopFunction{})
 
-	var buffer []byte
+	var buffer string
 	openBraces := 0
 
 	for {
+		var prompt string
 		if openBraces == 0 {
-			fmt.Print("> ")
+			prompt = "> "
 		} else {
-			fmt.Print(". ")
+			prompt = ". "
 		}
-		line, err := reader.ReadBytes('\n')
+		line, err := lineReader.Prompt(prompt)
+
 		if err != nil {
 			if err == io.EOF {
 				fmt.Println("\nGoodbye!")
 				break
 			}
+			if err == liner.ErrPromptAborted {
+				// Apenas continue o loop, não encerre o programa
+				continue
+			}
 			os.Exit(65)
 		}
-		buffer = append(buffer, line...)
+		lineReader.AppendHistory(line)
+		buffer += line + "\n"
 
 		// Conta chaves abertas e fechadas
 		for _, b := range line {
@@ -58,8 +69,8 @@ func RunPrompt() {
 
 		// Só executa quando todos os blocos estão fechados
 		if openBraces <= 0 && len(buffer) > 0 {
-			run(buffer, interp)
-			buffer = nil
+			run([]byte(buffer), interp)
+			buffer = ""
 			openBraces = 0
 		}
 	}
