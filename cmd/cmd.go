@@ -49,7 +49,6 @@ func RunPrompt() {
 				break
 			}
 			if err == liner.ErrPromptAborted {
-				// Apenas continue o loop, não encerre o programa
 				continue
 			}
 			os.Exit(65)

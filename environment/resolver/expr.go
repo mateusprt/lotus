@@ -26,10 +26,13 @@ func (r *Resolver) VisitUnary(expr *ast.Unary) interface{} {
 }
 
 func (r *Resolver) VisitVariable(expr *ast.Variable) interface{} {
-	if !r.scopes.IsEmpty() && r.scopes.Peek()[expr.Name.Lexeme] == false {
-		panic("Cannot read local variable in its own initializer.")
+	if !r.scopes.IsEmpty() {
+		scope := r.scopes.Peek()
+		defined, ok := scope[expr.Name.Lexeme]
+		if ok && !defined {
+			panic("Cannot read local variable in its own initializer.")
+		}
 	}
-
 	resolveLocal(r, expr, expr.Name)
 	return nil
 }
