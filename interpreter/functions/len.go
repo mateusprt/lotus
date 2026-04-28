@@ -11,13 +11,16 @@ func (c *LenFunction) Arity() int {
 }
 
 func (c *LenFunction) Call(interpreter *interpreter.Interpreter, arguments []interface{}) interface{} {
-	str, ok := arguments[0].(string)
-	if !ok {
-		panic("len() expects a string as argument")
+	str, strOk := arguments[0].(string)
+	arr, arrOk := arguments[0].([]interface{})
+	if !strOk && !arrOk {
+		panic("len() expects a string or an array as argument")
 	}
-	return float64(len(str))
+	if strOk {
+		return float64(len(str))
+	}
+	return float64(len(arr))
 }
-
 func (c *LenFunction) String() string {
 	return "<native fn>"
 }
