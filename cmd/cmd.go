@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 
 	"github.com/mateusprt/lotus/environment"
 	"github.com/mateusprt/lotus/environment/resolver"
@@ -76,6 +77,11 @@ func RunPrompt() {
 }
 
 func RunFile(path string) {
+	ext := filepath.Ext(path)
+	if ext != ".lt" {
+		fmt.Println("Error: only files with .lt extension are allowed.")
+		os.Exit(65)
+	}
 	byteSequence, err := os.ReadFile(path)
 	if err != nil {
 		fmt.Printf("Error reading file: %s\n", err)
