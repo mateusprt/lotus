@@ -19,7 +19,6 @@ func (r *Resolver) VisitVarStmt(stmt *ast.VarStmt) {
 	if stmt.Initializer != nil {
 		resolveExpr(r, stmt.Initializer)
 	}
-
 	define(r, stmt.Name)
 }
 
