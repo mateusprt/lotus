@@ -17,19 +17,19 @@ jobs:
           go-version: '1.25.5'
 
       - name: Build para Linux
-        run: GOOS=linux GOARCH=amd64 go build -o lotus
+        run: GOOS=linux GOARCH=amd64 go build -o lotus_linux
 
       - name: Build para Windows
         run: GOOS=windows GOARCH=amd64 go build -o lotus.exe
 
       - name: Build para macOS
-        run: GOOS=darwin GOARCH=amd64 go build -o lotus
+        run: GOOS=darwin GOARCH=amd64 go build -o lotus_mac
 
       - name: Zipar binários
         run: |
-          zip lotus-linux.zip lotus
+          zip lotus-linux.zip lotus_linux
           zip lotus-windows.zip lotus.exe
-          zip lotus-mac.zip lotus
+          zip lotus-mac.zip lotus_mac
 
       - name: Criar Release no GitHub
         uses: softprops/action-gh-release@v1
