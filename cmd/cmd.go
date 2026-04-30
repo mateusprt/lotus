@@ -47,12 +47,14 @@ func RunPrompt() {
 		if err != nil {
 			if err == io.EOF {
 				fmt.Println("\nGoodbye!")
-				break
 			}
 			if err == liner.ErrPromptAborted {
+				if (openBraces % 2) != 0 {
+					openBraces--
+				}
 				continue
 			}
-			os.Exit(65)
+			break
 		}
 		lineReader.AppendHistory(line)
 		buffer += line + "\n"
