@@ -39,7 +39,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         # Adiciona os binários zipados como assets
         with:
-        tag_name: auto-release-${{ github.sha }}
+          tag_name: auto-release-${{ github.sha }}
           files: |
             lotus-linux.zip
             lotus-windows.zip
