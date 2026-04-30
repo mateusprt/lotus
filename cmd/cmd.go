@@ -50,6 +50,9 @@ func RunPrompt() {
 				break
 			}
 			if err == liner.ErrPromptAborted {
+				if (openBraces % 2) != 0 {
+					openBraces--
+				}
 				continue
 			}
 			os.Exit(65)
