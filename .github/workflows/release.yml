@@ -23,12 +23,13 @@ jobs:
       - name: Build with build.sh
         run: ./build.sh
 
-      - name: Create GitHub Release
+      - name: Create or Update GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: auto-release-${{ github.sha }}
+          tag_name: 1.0
           files: |
             lotus
             lotus.exe
+          overwrite: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
