@@ -2,7 +2,7 @@
 
 set -e
 
-LOTUS_VERSION="${1:-1.0}"
+LOTUS_VERSION="${1:-1}"
 INSTALL_DIR="$HOME/.lotus/versions/$LOTUS_VERSION"
 BIN_DIR="$HOME/.lotus/bin"
 
@@ -32,8 +32,7 @@ cd ~
 # Add to PATH in the current shell and suggest adding to shell profile
 if [[ ":$PATH:" != *":$BIN_DIR:"* ]]; then
     export PATH="$BIN_DIR:$PATH"
-    echo "Lotus added to PATH. Restart your terminal or run: export PATH=\"\$HOME/.lotus/bin:\$PATH\""
-fi
-
-echo "Lotus $LOTUS_VERSION successfully installed in $INSTALL_DIR"
-lotus --version || echo "Run 'lotus --version' to test."
+    echo -e "\n\033[1;33m==============================\nLotus added to PATH. Please, restart your terminal.\n==============================\033[0m\n"
+    echo "Lotus $LOTUS_VERSION successfully installed in $INSTALL_DIR"
+    fi
+echo -e "\n\033[1;33m==============================\nPlease restart your terminal. After that, run 'lotus --version' to verify the installed version.\n==============================\033[0m\n"
