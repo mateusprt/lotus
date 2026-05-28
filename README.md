@@ -18,7 +18,7 @@ Inspired by languages like Go and Javascript, Lotus aims to combine the best of 
 
 ## Installation
 
-### Linux
+### Linux: Ubuntu 24.4.
 
 To install Lotus on Linux, run the following command in your terminal:
 
@@ -32,9 +32,9 @@ You can also download the binary directly:
 
 - [Download for Linux](https://github.com/mateusprt/lotus/releases/download/1/lotus)
 
-### Windows
+### Windows 10
 
-1. Open PowerShell.
+1. Open PowerShell as administrator.
 2. Run the following commands:
 
 ```powershell
