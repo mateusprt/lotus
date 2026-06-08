@@ -8,12 +8,24 @@ import (
 
 	"github.com/mateusprt/lotus/environment"
 	"github.com/mateusprt/lotus/environment/resolver"
+	"github.com/mateusprt/lotus/errors"
 	"github.com/mateusprt/lotus/interpreter"
 	"github.com/mateusprt/lotus/interpreter/functions"
 	"github.com/mateusprt/lotus/parser"
 	"github.com/mateusprt/lotus/scanner"
 	"github.com/peterh/liner"
 )
+
+func initEnv() *environment.Environment {
+	env := environment.New()
+	environment.Define(env, "now", &functions.NowFunction{})
+	environment.Define(env, "len", &functions.LenFunction{})
+	environment.Define(env, "first", &functions.FirstFunction{})
+	environment.Define(env, "last", &functions.LastFunction{})
+	environment.Define(env, "push", &functions.PushFunction{})
+	environment.Define(env, "pop", &functions.PopFunction{})
+	return env
+}
 
 func RunPrompt() {
 	fmt.Println("Welcome to the Lotus REPL!")
@@ -23,14 +35,7 @@ func RunPrompt() {
 	defer lineReader.Close()
 	lineReader.SetCtrlCAborts(true)
 
-	env := environment.New()
-	interp := interpreter.New(env)
-	environment.Define(env, "now", &functions.NowFunction{})
-	environment.Define(env, "len", &functions.LenFunction{})
-	environment.Define(env, "first", &functions.FirstFunction{})
-	environment.Define(env, "last", &functions.LastFunction{})
-	environment.Define(env, "push", &functions.PushFunction{})
-	environment.Define(env, "pop", &functions.PopFunction{})
+	interp := interpreter.New(initEnv())
 
 	var buffer string
 	openBraces := 0
@@ -71,7 +76,13 @@ func RunPrompt() {
 
 		// Só executa quando todos os blocos estão fechados
 		if openBraces <= 0 && len(buffer) > 0 {
-			run([]byte(buffer), interp)
+			if err := run([]byte(buffer), interp); err != nil {
+				if runtimeErr, ok := err.(*errors.RuntimeError); ok {
+					errors.PrintRuntimeError(runtimeErr)
+				} else {
+					fmt.Println(err)
+				}
+			}
 			buffer = ""
 			openBraces = 0
 		}
@@ -89,10 +100,17 @@ func RunFile(path string) {
 		fmt.Printf("Error reading file: %s\n", err)
 		os.Exit(65)
 	}
-	run(byteSequence, interpreter.New(environment.New()))
+	if err := run(byteSequence, interpreter.New(initEnv())); err != nil {
+		if runtimeErr, ok := err.(*errors.RuntimeError); ok {
+			errors.PrintRuntimeError(runtimeErr)
+		} else {
+			fmt.Println(err)
+		}
+		os.Exit(65)
+	}
 }
 
-func run(byteSequence []byte, interp *interpreter.Interpreter) {
+func run(byteSequence []byte, interp *interpreter.Interpreter) error {
 	sc := scanner.New(byteSequence)
 	tokens := scanner.ScanTokens(sc)
 	p := parser.New(tokens)
@@ -100,5 +118,5 @@ func run(byteSequence []byte, interp *interpreter.Interpreter) {
 
 	res := resolver.New(interp)
 	resolver.Resolve(res, statements)
-	interp.Interpret(statements)
+	return interp.Interpret(statements)
 }

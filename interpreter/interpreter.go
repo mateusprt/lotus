@@ -2,7 +2,6 @@ package interpreter
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/mateusprt/lotus/ast"
 	"github.com/mateusprt/lotus/environment"
@@ -20,20 +19,22 @@ func New(e *environment.Environment) *Interpreter {
 	return &Interpreter{Globals: e, environment: e, locals: make(map[ast.Expression]int)}
 }
 
-func (i *Interpreter) Interpret(statements []ast.Stmt) {
+func (i *Interpreter) Interpret(statements []ast.Stmt) (runtimeErr error) {
 	defer func() {
 		if r := recover(); r != nil {
-			if runtimeErr, ok := r.(*errors.RuntimeError); ok {
-				errors.PrintRuntimeError(runtimeErr)
-				os.Exit(65)
-			} else {
-				panic(r)
+			if err, ok := r.(*errors.RuntimeError); ok {
+				runtimeErr = err
+				return
 			}
+			panic(r)
 		}
 	}()
+
 	for _, statement := range statements {
 		execute(statement, i)
 	}
+
+	return nil
 }
 
 func execute(stmt ast.Stmt, interpreter *Interpreter) {

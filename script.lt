@@ -1,0 +1,39 @@
+// Definição da estrutura Produto
+struct Produto {
+    nome;
+    preco;
+    quantidade;
+}
+
+// Função para exibir a lista de produtos
+fn listarProdutos(produtos) {
+    var i = 0;
+    while (i < len(produtos)) {
+        print(produtos[i]);
+        i = i + 1;
+    }
+}
+
+// Cadastro de produtos
+var produtos = [];
+
+var p1 = Produto();
+p1.nome = "Arroz";
+p1.preco = 5.99;
+p1.quantidade = 10;
+produtos = push(produtos, p1);
+
+var p2 = Produto();
+p2.nome = "Feijão";
+p2.preco = 7.49;
+p2.quantidade = 5;
+produtos = push(produtos, p2);
+
+var p3 = Produto();
+p3.nome = "Macarrão";
+p3.preco = 3.99;
+p3.quantidade = 20;
+produtos = push(produtos, p3);
+
+// Listagem dos produtos cadastrados
+listarProdutos(produtos);

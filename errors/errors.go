@@ -28,6 +28,10 @@ func Error(message string) {
 	report(message)
 }
 
+func (e *RuntimeError) Error() string {
+	return fmt.Sprintf("[line %d] RuntimeError: %s", e.Token.Line, e.Message)
+}
+
 func NewParseError(currentToken token.Token, message string) *ParseError {
 	errorMessage := fmt.Sprintf("%d at end: %s", currentToken.Line, message)
 	if currentToken.Type == token.EOF {

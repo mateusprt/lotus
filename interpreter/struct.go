@@ -1,6 +1,8 @@
 package interpreter
 
 import (
+	"fmt"
+
 	"github.com/mateusprt/lotus/errors"
 	"github.com/mateusprt/lotus/token"
 )
@@ -16,7 +18,13 @@ type LotusInstance struct {
 }
 
 func (s *LotusInstance) String() string {
-	return s.str.Name + " instance"
+	result := "{"
+	for _, field := range s.str.Fields {
+		val := s.fields[field]
+		result += " " + field + ": " + fmt.Sprintf("%v", val)
+	}
+	result += " }"
+	return result
 }
 
 func (s *LotusStruct) Call(interpreter *Interpreter, arguments []interface{}) interface{} {
