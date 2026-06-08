@@ -179,7 +179,6 @@ func (i *Interpreter) VisitIndex(expr *ast.Index) interface{} {
 	if intIdx < 0 || intIdx >= len(arr) {
 		panic(fmt.Sprintf("Array index %d out of bounds (size: %d).", intIdx, len(arr)))
 	}
-	fmt.Println("visitIndex")
 	return arr[intIdx]
 }
 

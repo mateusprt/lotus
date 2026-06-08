@@ -10,6 +10,9 @@ func expressionStatement(p *Parser) *ast.ExpressionStmt {
 	if err != nil {
 		panic(err)
 	}
-	consume(p, token.SEMICOLON, "Expect ';' after expression.")
+	if _, err := consume(p, token.SEMICOLON, "Expect ';' after expression."); err != nil {
+		panic(err)
+	}
+
 	return &ast.ExpressionStmt{Expression: expr}
 }

@@ -20,6 +20,9 @@ func varDeclaration(p *Parser) *ast.VarStmt {
 		initializer = expr
 	}
 
-	consume(p, token.SEMICOLON, "Expect ';' after variable declaration.")
+	if _, err := consume(p, token.SEMICOLON, "Expect ';' after variable declaration."); err != nil {
+		panic(err)
+	}
+
 	return &ast.VarStmt{Name: name, Initializer: initializer}
 }

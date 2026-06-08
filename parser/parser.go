@@ -21,7 +21,10 @@ func New(tokens []token.Token) *Parser {
 func Parse(p *Parser) []ast.Stmt {
 	statements := make([]ast.Stmt, 0)
 	for !isAtEnd(p) {
-		statements = append(statements, declaration(p))
+		stmt := declaration(p)
+		if stmt != nil {
+			statements = append(statements, stmt)
+		}
 	}
 	return statements
 }
