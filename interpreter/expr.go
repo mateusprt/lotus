@@ -81,12 +81,17 @@ func lookUpVariable(i *Interpreter, name token.Token, expr ast.Expression) inter
 	if ok {
 		return environment.GetAt(i.environment, distance, name.Lexeme)
 	}
-	return environment.Get(i.environment, name)
+	return environment.Get(i.Globals, name)
 }
 
 func (i *Interpreter) VisitAssign(expr *ast.Assign) interface{} {
 	value := evaluate(expr.Value, i)
-	environment.Assign(i.environment, expr.Name, value)
+	distance, ok := i.locals[expr]
+	if ok {
+		environment.AssignAt(i.environment, distance, expr.Name, value)
+	} else {
+		environment.Assign(i.Globals, expr.Name, value)
+	}
 	return value
 }
 
